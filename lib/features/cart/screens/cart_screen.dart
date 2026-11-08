@@ -37,7 +37,7 @@ class CartScreen extends ConsumerWidget {
           if (cart.items.isNotEmpty)
             TextButton(
               onPressed: () => _confirmClearAll(context, cartNotifier),
-              child: const Text(
+              child: Text(
                 'Clear All',
                 style: TextStyle(color: AppColors.error, fontSize: 13),
               ),
@@ -59,14 +59,14 @@ class CartScreen extends ConsumerWidget {
                         shape: BoxShape.circle,
                         border: Border.all(color: AppColors.border),
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.shopping_bag_outlined,
                         color: AppColors.primaryAccent,
                         size: 40,
                       ),
                     ),
                     const SizedBox(height: 20),
-                    const Text(
+                    Text(
                       'Your cart is empty',
                       style: TextStyle(
                         color: AppColors.primaryText,
@@ -75,7 +75,7 @@ class CartScreen extends ConsumerWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    const Text(
+                    Text(
                       'Add some gear and start your ascent.',
                       style: TextStyle(color: AppColors.secondaryText),
                     ),
@@ -120,7 +120,7 @@ class CartScreen extends ConsumerWidget {
                               child: () {
                                 final path = item.productImage.trim();
                                 if (path.isEmpty) {
-                                  return const Center(
+                                  return Center(
                                     child: Icon(
                                       Icons.sports_martial_arts,
                                       color: AppColors.tertiaryText,
@@ -138,7 +138,7 @@ class CartScreen extends ConsumerWidget {
                                           path.substring(commaIndex + 1),
                                         ),
                                         fit: BoxFit.cover,
-                                        errorBuilder: (_, _, _) => const Center(
+                                        errorBuilder: (_, _, _) => Center(
                                           child: Icon(
                                             Icons.sports_martial_arts,
                                             color: AppColors.tertiaryText,
@@ -150,7 +150,7 @@ class CartScreen extends ConsumerWidget {
                                   } catch (e) {
                                     debugPrint('DATA URL IMAGE ERROR: $e');
                                   }
-                                  return const Center(
+                                  return Center(
                                     child: Icon(
                                       Icons.sports_martial_arts,
                                       color: AppColors.tertiaryText,
@@ -162,7 +162,7 @@ class CartScreen extends ConsumerWidget {
                                   return Image.asset(
                                     path,
                                     fit: BoxFit.cover,
-                                    errorBuilder: (_, _, _) => const Center(
+                                    errorBuilder: (_, _, _) => Center(
                                       child: Icon(
                                         Icons.sports_martial_arts,
                                         color: AppColors.tertiaryText,
@@ -175,7 +175,7 @@ class CartScreen extends ConsumerWidget {
                                   return Image.network(
                                     path,
                                     fit: BoxFit.cover,
-                                    errorBuilder: (_, _, _) => const Center(
+                                    errorBuilder: (_, _, _) => Center(
                                       child: Icon(
                                         Icons.sports_martial_arts,
                                         color: AppColors.tertiaryText,
@@ -184,7 +184,7 @@ class CartScreen extends ConsumerWidget {
                                     ),
                                   );
                                 }
-                                return const Center(
+                                return Center(
                                   child: Icon(
                                     Icons.sports_martial_arts,
                                     color: AppColors.tertiaryText,
@@ -203,7 +203,7 @@ class CartScreen extends ConsumerWidget {
                                     item.productName,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       color: AppColors.primaryText,
                                       fontWeight: FontWeight.w600,
                                       fontSize: 14,
@@ -214,7 +214,7 @@ class CartScreen extends ConsumerWidget {
                                     '${item.selectedSize} · ${item.selectedColor}',
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       color: AppColors.secondaryText,
                                       fontSize: 12,
                                     ),
@@ -222,7 +222,7 @@ class CartScreen extends ConsumerWidget {
                                   const SizedBox(height: 6),
                                   Text(
                                     '₱${item.unitPrice.toStringAsFixed(2)}',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       color: AppColors.primaryAccent,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 14,
@@ -256,7 +256,7 @@ class CartScreen extends ConsumerWidget {
                                               child: Text(
                                                 '${item.quantity}',
                                                 textAlign: TextAlign.center,
-                                                style: const TextStyle(
+                                                style: TextStyle(
                                                   color: AppColors.primaryText,
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 13,
@@ -293,7 +293,7 @@ class CartScreen extends ConsumerWidget {
                                       IconButton(
                                         onPressed: () =>
                                             cartNotifier.removeItem(item.id),
-                                        icon: const Icon(
+                                        icon: Icon(
                                           Icons.delete_outline,
                                           color: AppColors.error,
                                           size: 20,
@@ -315,7 +315,7 @@ class CartScreen extends ConsumerWidget {
                 // ===== Summary bar =====
                 Container(
                   padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     color: AppColors.secondarySurface,
                     border: Border(top: BorderSide(color: AppColors.border)),
                   ),
@@ -336,7 +336,7 @@ class CartScreen extends ConsumerWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text(
+                            Text(
                               'TOTAL',
                               style: TextStyle(
                                 color: AppColors.secondaryText,
@@ -346,7 +346,7 @@ class CartScreen extends ConsumerWidget {
                             ),
                             Text(
                               '₱${total.toStringAsFixed(2)}',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: AppColors.primaryText,
                                 fontWeight: FontWeight.w800,
                                 fontSize: 18,
@@ -365,7 +365,7 @@ class CartScreen extends ConsumerWidget {
                         ),
                         TextButton(
                           onPressed: () => context.go('/shop'),
-                          child: const Text(
+                          child: Text(
                             'Continue Shopping',
                             style: TextStyle(
                               color: AppColors.lightAccent,
@@ -387,18 +387,18 @@ class CartScreen extends ConsumerWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.secondarySurface,
-        title: const Text(
+        title: Text(
           'Clear cart?',
           style: TextStyle(color: AppColors.primaryText),
         ),
-        content: const Text(
+        content: Text(
           'This will remove all items from your cart.',
           style: TextStyle(color: AppColors.secondaryText),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text(
+            child: Text(
               'Cancel',
               style: TextStyle(color: AppColors.secondaryText),
             ),
@@ -460,7 +460,7 @@ class _SummaryRow extends StatelessWidget {
               label,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.secondaryText,
                 fontSize: 13.5,
               ),
@@ -472,7 +472,7 @@ class _SummaryRow extends StatelessWidget {
               if (trailing != null) ...[
                 Text(
                   '$trailing  ',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.success,
                     fontSize: 11,
                     fontWeight: FontWeight.bold,

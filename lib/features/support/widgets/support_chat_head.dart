@@ -85,7 +85,7 @@ class _SupportChatHeadState extends ConsumerState<SupportChatHead> {
                             radius: (_size - 10) / 2,
                             backgroundColor: AppColors.softGreen,
                           )
-                        : const DecoratedBox(
+                        : DecoratedBox(
                             decoration: BoxDecoration(
                               color: AppColors.primaryAccent,
                               shape: BoxShape.circle,

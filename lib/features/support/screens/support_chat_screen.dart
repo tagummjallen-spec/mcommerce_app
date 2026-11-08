@@ -43,7 +43,7 @@ class _SupportChatScreenState extends ConsumerState<SupportChatScreen> {
     if (user == null) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Text('Please sign in to contact support.'),
             backgroundColor: AppColors.error,
           ),
@@ -104,15 +104,15 @@ class _SupportChatScreenState extends ConsumerState<SupportChatScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.support_agent, size: 56, color: AppColors.primaryAccent),
+                Icon(Icons.support_agent, size: 56, color: AppColors.primaryAccent),
                 const SizedBox(height: 16),
-                const Text(
+                Text(
                   'Sign in to chat with support',
                   style: TextStyle(color: AppColors.primaryText, fontSize: 18, fontWeight: FontWeight.w600),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
-                const Text(
+                Text(
                   'Our team can help with orders, products, and account questions.',
                   style: TextStyle(color: AppColors.secondaryText),
                   textAlign: TextAlign.center,
@@ -155,14 +155,14 @@ class _SupportChatScreenState extends ConsumerState<SupportChatScreen> {
                   padding: const EdgeInsets.all(20),
                   child: Text(
                     'Could not load chat.\n$e',
-                    style: const TextStyle(color: AppColors.error),
+                    style: TextStyle(color: AppColors.error),
                     textAlign: TextAlign.center,
                   ),
                 ),
               ),
               data: (messages) {
                 if (messages.isEmpty) {
-                  return const Center(
+                  return Center(
                     child: Padding(
                       padding: EdgeInsets.all(24),
                       child: Column(
@@ -198,7 +198,7 @@ class _SupportChatScreenState extends ConsumerState<SupportChatScreen> {
             top: false,
             child: Container(
               padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: AppColors.secondarySurface,
                 border: Border(top: BorderSide(color: AppColors.border)),
               ),
@@ -211,19 +211,19 @@ class _SupportChatScreenState extends ConsumerState<SupportChatScreen> {
                       maxLines: 4,
                       textInputAction: TextInputAction.send,
                       onSubmitted: (_) => _send(),
-                      style: const TextStyle(color: AppColors.primaryText),
+                      style: TextStyle(color: AppColors.primaryText),
                       decoration: InputDecoration(
                         hintText: 'Type your message...',
-                        hintStyle: const TextStyle(color: AppColors.tertiaryText),
+                        hintStyle: TextStyle(color: AppColors.tertiaryText),
                         filled: true,
                         fillColor: AppColors.cardSurface,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(24),
-                          borderSide: const BorderSide(color: AppColors.border),
+                          borderSide: BorderSide(color: AppColors.border),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(24),
-                          borderSide: const BorderSide(color: AppColors.border),
+                          borderSide: BorderSide(color: AppColors.border),
                         ),
                         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                       ),
@@ -290,7 +290,7 @@ class _MessageBubble extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 2),
                 child: Text(
                   message.senderName.isNotEmpty ? message.senderName : 'Support',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.lightAccent,
                     fontSize: 11,
                     fontWeight: FontWeight.w600,

@@ -47,7 +47,7 @@ class ProductCard extends StatelessWidget {
                     product.name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.primaryText,
                       fontWeight: FontWeight.w600,
                       fontSize: 13.5,
@@ -60,7 +60,7 @@ class ProductCard extends StatelessWidget {
                         : product.disciplines.take(2).join(' • '),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.tertiaryText,
                       fontSize: 11,
                     ),
@@ -71,7 +71,7 @@ class ProductCard extends StatelessWidget {
                     children: [
                       Text(
                         '₱${product.price.toStringAsFixed(2)}',
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.primaryAccent,
                           fontWeight: FontWeight.bold,
                           fontSize: 14.5,
@@ -87,7 +87,7 @@ class ProductCard extends StatelessWidget {
                             color: AppColors.error.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(4),
                           ),
-                          child: const Text(
+                          child: Text(
                             'SOLD OUT',
                             style: TextStyle(
                               color: AppColors.error,
@@ -146,7 +146,7 @@ class ProductCard extends StatelessWidget {
           if (progress == null) return child;
           return Container(
             color: AppColors.cardSurface,
-            child: const Center(
+            child: Center(
               child: SizedBox(
                 width: 20,
                 height: 20,
@@ -171,7 +171,7 @@ class ProductCard extends StatelessWidget {
   Widget _fallbackImage() {
     return Container(
       color: AppColors.cardSurface,
-      child: const Center(
+      child: Center(
         child: Icon(
           Icons.sports_martial_arts,
           color: AppColors.tertiaryText,

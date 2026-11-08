@@ -47,7 +47,7 @@ class CheckoutSuccessScreen extends ConsumerWidget {
                           width: 1.5,
                         ),
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.account_balance_wallet_outlined,
                         color: AppColors.primaryAccent,
                         size: 42,
@@ -63,7 +63,7 @@ class CheckoutSuccessScreen extends ConsumerWidget {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    const Text(
+                    Text(
                       'We have received your order request. Our team will confirm '
                       'availability and prepare your gear for delivery.',
                       textAlign: TextAlign.center,
@@ -85,7 +85,7 @@ class CheckoutSuccessScreen extends ConsumerWidget {
                         border: Border.all(color: AppColors.border),
                       ),
                       child: orderAsync.when(
-                        loading: () => const Padding(
+                        loading: () => Padding(
                           padding: EdgeInsets.symmetric(vertical: 24),
                           child: Center(
                             child: SizedBox(
@@ -126,7 +126,7 @@ class CheckoutSuccessScreen extends ConsumerWidget {
             // ===== Bottom actions =====
             Container(
               padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: AppColors.primaryBackground,
                 border: Border(top: BorderSide(color: AppColors.border)),
               ),
@@ -173,7 +173,7 @@ class CheckoutSuccessScreen extends ConsumerWidget {
         content: SingleChildScrollView(
           child: SelectableText(
             receipt,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'monospace',
               fontSize: 12.5,
               height: 1.5,
@@ -192,7 +192,7 @@ class CheckoutSuccessScreen extends ConsumerWidget {
               if (ctx.mounted) Navigator.pop(ctx);
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
+                  SnackBar(
                     content: Text('Receipt copied to clipboard.'),
                     backgroundColor: AppColors.success,
                   ),
@@ -239,7 +239,7 @@ class _OrderSummary extends StatelessWidget {
       children: [
         Row(
           children: [
-            const Expanded(
+            Expanded(
               child: Text(
                 'ORDER SUMMARY',
                 style: TextStyle(
@@ -256,7 +256,7 @@ class _OrderSummary extends StatelessWidget {
                 color: AppColors.softGreen,
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: const Text(
+              child: Text(
                 'REQUESTED',
                 style: TextStyle(
                   color: AppColors.primaryAccent,
@@ -297,7 +297,7 @@ class _OrderSummary extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 5),
           child: Row(
             children: [
-              const Expanded(
+              Expanded(
                 child: Text(
                   'Payment status',
                   style: TextStyle(
@@ -325,7 +325,7 @@ class _SummaryFallback extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'ORDER SUMMARY',
           style: TextStyle(
             color: AppColors.secondaryText,
@@ -338,7 +338,7 @@ class _SummaryFallback extends StatelessWidget {
         _SummaryRow(label: 'Order ID', value: shortOrderId),
         const _SummaryRow(label: 'Status', value: 'Request received'),
         const SizedBox(height: 4),
-        const Text(
+        Text(
           'Full details will appear once the order finishes syncing.',
           style: TextStyle(color: AppColors.tertiaryText, fontSize: 12),
         ),
@@ -473,7 +473,7 @@ class _CashBanner extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   message,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.primaryText,
                     fontSize: 12.5,
                     height: 1.45,

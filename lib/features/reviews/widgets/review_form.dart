@@ -50,7 +50,7 @@ class _ReviewFormState extends ConsumerState<ReviewForm> {
       _commentController.clear();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Text('Review submitted!'),
             backgroundColor: AppColors.success,
           ),
@@ -82,7 +82,7 @@ class _ReviewFormState extends ConsumerState<ReviewForm> {
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: AppColors.border),
         ),
-        child: const Text(
+        child: Text(
           'Log in to write a review.',
           style: TextStyle(color: AppColors.secondaryText),
         ),
@@ -99,7 +99,7 @@ class _ReviewFormState extends ConsumerState<ReviewForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'WRITE A REVIEW',
             style: TextStyle(
               color: AppColors.secondaryText,
@@ -111,7 +111,7 @@ class _ReviewFormState extends ConsumerState<ReviewForm> {
           const SizedBox(height: 12),
           Row(
             children: [
-              const Flexible(
+              Flexible(
                 child: Text(
                   'Your rating: ',
                   overflow: TextOverflow.ellipsis,

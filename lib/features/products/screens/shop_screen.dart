@@ -69,16 +69,16 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
               controller: _searchController,
               onChanged: (value) =>
                   ref.read(shopFilterProvider.notifier).setSearch(value),
-              style: const TextStyle(color: AppColors.primaryText),
+              style: TextStyle(color: AppColors.primaryText),
               decoration: InputDecoration(
                 hintText: 'Search products...',
-                prefixIcon: const Icon(
+                prefixIcon: Icon(
                   Icons.search,
                   color: AppColors.secondaryText,
                 ),
                 suffixIcon: _searchController.text.isNotEmpty
                     ? IconButton(
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.clear,
                           color: AppColors.secondaryText,
                           size: 18,
@@ -122,16 +122,16 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
                     initialValue: filter.sortBy,
                     key: ValueKey<String>(filter.sortBy),
                     dropdownColor: AppColors.secondarySurface,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.primaryText,
                       fontSize: 13,
                     ),
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.keyboard_arrow_down,
                       color: AppColors.secondaryText,
                       size: 20,
                     ),
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       contentPadding: EdgeInsets.symmetric(
                         horizontal: 12,
                         vertical: 12,
@@ -260,7 +260,7 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
           // ===== Product grid =====
           Expanded(
             child: filtered.when(
-              loading: () => const Center(
+              loading: () => Center(
                 child: CircularProgressIndicator(
                   color: AppColors.primaryAccent,
                 ),
@@ -269,20 +269,20 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.error_outline,
                       color: AppColors.error,
                       size: 42,
                     ),
                     const SizedBox(height: 12),
-                    const Text(
+                    Text(
                       'Failed to load products.',
                       style: TextStyle(color: AppColors.secondaryText),
                     ),
                     const SizedBox(height: 12),
                     TextButton(
                       onPressed: () => ref.invalidate(productsProvider),
-                      child: const Text(
+                      child: Text(
                         'Retry',
                         style: TextStyle(color: AppColors.primaryAccent),
                       ),
@@ -298,13 +298,13 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(
+                          Icon(
                             Icons.search_off,
                             color: AppColors.tertiaryText,
                             size: 52,
                           ),
                           const SizedBox(height: 16),
-                          const Text(
+                          Text(
                             'No products found',
                             style: TextStyle(
                               color: AppColors.primaryText,
@@ -313,7 +313,7 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
                             ),
                           ),
                           const SizedBox(height: 6),
-                          const Text(
+                          Text(
                             'Try adjusting your search or filters.',
                             style: TextStyle(color: AppColors.secondaryText),
                             textAlign: TextAlign.center,
@@ -411,7 +411,7 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
                                 productType = 'All';
                               });
                             },
-                            child: const Text(
+                            child: Text(
                               'Reset',
                               style: TextStyle(color: AppColors.secondaryText),
                             ),
@@ -419,7 +419,7 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
                         ],
                       ),
                       const SizedBox(height: 8),
-                      const Text(
+                      Text(
                         'Discipline',
                         style: TextStyle(
                           color: AppColors.primaryText,
@@ -457,7 +457,7 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
                         }).toList(),
                       ),
                       const SizedBox(height: 18),
-                      const Text(
+                      Text(
                         'Product Type',
                         style: TextStyle(
                           color: AppColors.primaryText,

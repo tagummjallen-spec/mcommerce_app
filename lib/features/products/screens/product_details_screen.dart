@@ -118,7 +118,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
       backgroundColor: AppColors.primaryBackground,
       appBar: const BrandAppBar(showBack: true),
       body: productAsync.when(
-        loading: () => const Center(
+        loading: () => Center(
           child: CircularProgressIndicator(color: AppColors.primaryAccent),
         ),
         error: (e, _) => _ErrorState(
@@ -194,7 +194,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                       children: [
                         Text(
                           product.category.toUpperCase(),
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppColors.primaryAccent,
                             fontSize: 11,
                             fontWeight: FontWeight.w800,
@@ -227,7 +227,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                           product.description.isNotEmpty
                               ? product.description
                               : 'No description available for this product yet.',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppColors.secondaryText,
                             height: 1.65,
                             fontSize: 14,
@@ -288,7 +288,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                                 ? null
                                 : () => _openReviewForm(product),
                             icon: _checkingReviewEligibility
-                                ? const SizedBox(
+                                ? SizedBox(
                                     width: 16,
                                     height: 16,
                                     child: CircularProgressIndicator(
@@ -308,7 +308,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        const Text(
+                        Text(
                           'Only verified customers with a completed order can '
                           'review this product.',
                           style: TextStyle(
@@ -324,7 +324,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                               productReviewsProvider(product.id),
                             );
                             return reviewsAsync.when(
-                              loading: () => const Center(
+                              loading: () => Center(
                                 child: Padding(
                                   padding: EdgeInsets.all(16),
                                   child: CircularProgressIndicator(
@@ -335,13 +335,13 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                               ),
                               error: (e, _) => Text(
                                 'Failed to load reviews: $e',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   color: AppColors.error,
                                 ),
                               ),
                               data: (reviews) {
                                 if (reviews.isEmpty) {
-                                  return const Padding(
+                                  return Padding(
                                     padding: EdgeInsets.symmetric(vertical: 8),
                                     child: Text(
                                       'No reviews yet. Be the first to review!',
@@ -381,7 +381,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
 
           return Container(
             padding: const EdgeInsets.fromLTRB(20, 14, 20, 14),
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               color: AppColors.secondarySurface,
               border: Border(top: BorderSide(color: AppColors.border)),
             ),
@@ -394,7 +394,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Text(
+                        Text(
                           'TOTAL',
                           style: TextStyle(
                             color: AppColors.tertiaryText,
@@ -406,7 +406,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                         const SizedBox(height: 2),
                         Text(
                           '₱${(product.price * _quantity).toStringAsFixed(2)}',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppColors.primaryText,
                             fontWeight: FontWeight.w800,
                             fontSize: 18,
@@ -423,7 +423,7 @@ class _ProductDetailsScreenState extends ConsumerState<ProductDetailsScreen> {
                           ? null
                           : () => _addToCart(product),
                       icon: _addingToCart
-                          ? const SizedBox(
+                          ? SizedBox(
                               width: 18,
                               height: 18,
                               child: CircularProgressIndicator(
@@ -482,7 +482,7 @@ class _ImageGallery extends StatelessWidget {
             fit: StackFit.expand,
             children: [
               if (images.isEmpty)
-                const ColoredBox(
+                ColoredBox(
                   color: AppColors.cardSurface,
                   child: Center(
                     child: Icon(
@@ -556,7 +556,7 @@ class _ThumbnailGallery extends StatelessWidget {
         child: _Thumb(
           selected: true,
           onTap: () {},
-          child: const Icon(
+          child: Icon(
             Icons.sports_martial_arts,
             size: 24,
             color: AppColors.tertiaryText,
@@ -644,7 +644,7 @@ class _ReviewsSummary extends ConsumerWidget {
                 : 'No reviews yet',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.secondaryText,
               fontSize: 13,
             ),
@@ -672,7 +672,7 @@ class _PriceAndStock extends StatelessWidget {
       children: [
         Text(
           '₱${price.toStringAsFixed(2)}',
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColors.primaryAccent,
             fontSize: 26,
             fontWeight: FontWeight.w800,
@@ -805,7 +805,7 @@ class _VariantChip extends StatelessWidget {
               ),
             ),
             if (disabled)
-              const Text(
+              Text(
                 'Sold out',
                 style: TextStyle(color: AppColors.error, fontSize: 10),
               ),
@@ -851,7 +851,7 @@ class _QuantityStepper extends StatelessWidget {
             child: Text(
               '$quantity',
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.primaryText,
                 fontWeight: FontWeight.w800,
                 fontSize: 15,
@@ -901,7 +901,7 @@ class _SectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text.toUpperCase(),
-      style: const TextStyle(
+      style: TextStyle(
         color: AppColors.secondaryText,
         fontSize: 11,
         fontWeight: FontWeight.w800,
@@ -937,7 +937,7 @@ class _ErrorState extends StatelessWidget {
             Text(
               message,
               textAlign: TextAlign.center,
-              style: const TextStyle(color: AppColors.secondaryText),
+              style: TextStyle(color: AppColors.secondaryText),
             ),
             const SizedBox(height: 16),
             ElevatedButton(

@@ -14,13 +14,13 @@ class PromoBanner extends StatelessWidget {
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            AppColors.primaryAccent,
+            const Color(0xFF2B1A54),
             AppColors.deepAccent,
-            Color(0xFF0F2B20),
+            const Color(0xFF1B1035),
           ],
         ),
         border: Border.all(color: AppColors.primaryAccent.withValues(alpha: 0.4)),
@@ -40,7 +40,7 @@ class PromoBanner extends StatelessWidget {
             child: const Text(
               'NEW SEASON DROP',
               style: TextStyle(
-                color: Color(0xFFD8EAD9),
+                color: Color(0xFFD9C8FF),
                 fontSize: 10.5,
                 fontWeight: FontWeight.bold,
                 letterSpacing: 1.2,
@@ -72,8 +72,8 @@ class PromoBanner extends StatelessWidget {
             icon: const Icon(Icons.arrow_forward, size: 18),
             label: const Text('SHOP NOW'),
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primaryBackground,
-              foregroundColor: AppColors.primaryAccent,
+              backgroundColor: Colors.white,
+              foregroundColor: AppColors.deepAccent,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             ),
           ),
@@ -199,7 +199,7 @@ class CategoryTile extends StatelessWidget {
               maxLines: 2,
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.primaryText,
                 fontSize: 11.5,
                 fontWeight: FontWeight.w600,

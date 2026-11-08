@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/widgets/brand_app_bar.dart';
+import '../../../core/widgets/theme_toggle_tile.dart';
 import '../../../providers/auth_provider.dart';
 import '../../../models/user_model.dart';
 import '../widgets/profile_avatar.dart';
@@ -40,14 +41,14 @@ class ProfileScreen extends ConsumerWidget {
                 shape: BoxShape.circle,
                 border: Border.all(color: AppColors.border),
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.person_outline,
                 color: AppColors.primaryAccent,
                 size: 44,
               ),
             ),
             const SizedBox(height: 20),
-            const Text(
+            Text(
               'Welcome, Guest',
               style: TextStyle(
                 color: AppColors.primaryText,
@@ -56,7 +57,7 @@ class ProfileScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 8),
-            const Text(
+            Text(
               'Sign in to manage your profile, view orders,\nand enjoy a personalized experience.',
               textAlign: TextAlign.center,
               style: TextStyle(color: AppColors.secondaryText, height: 1.5),
@@ -77,6 +78,8 @@ class ProfileScreen extends ConsumerWidget {
                 child: const Text('CREATE ACCOUNT'),
               ),
             ),
+            const SizedBox(height: 26),
+            const ThemeToggleTile(margin: EdgeInsets.zero),
           ],
         ),
       ),
@@ -96,7 +99,7 @@ class ProfileScreen extends ConsumerWidget {
         children: [
           // ===== Profile header =====
           profileAsync.when(
-            loading: () => const Center(
+            loading: () => Center(
               child: Padding(
                 padding: EdgeInsets.all(20),
                 child: CircularProgressIndicator(
@@ -132,7 +135,7 @@ class ProfileScreen extends ConsumerWidget {
                             name,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: AppColors.primaryText,
                               fontWeight: FontWeight.w700,
                               fontSize: 16,
@@ -143,7 +146,7 @@ class ProfileScreen extends ConsumerWidget {
                             email,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: AppColors.secondaryText,
                               fontSize: 13,
                             ),
@@ -160,7 +163,7 @@ class ProfileScreen extends ConsumerWidget {
                               ),
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            child: const Text(
+                            child: Text(
                               'CUSTOMER',
                               style: TextStyle(
                                 color: AppColors.lightAccent,
@@ -224,6 +227,18 @@ class ProfileScreen extends ConsumerWidget {
 
           const SizedBox(height: 20),
           Text(
+            'APPEARANCE',
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: AppColors.tertiaryText,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.2,
+            ),
+          ),
+          const SizedBox(height: 10),
+          const ThemeToggleTile(),
+
+          const SizedBox(height: 20),
+          Text(
             'SESSION',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
               color: AppColors.tertiaryText,
@@ -241,7 +256,7 @@ class ProfileScreen extends ConsumerWidget {
           ),
 
           const SizedBox(height: 24),
-          const Center(
+          Center(
             child: Text(
               'Ascended Athletics • Academic M-Commerce Demo',
               style: TextStyle(color: AppColors.tertiaryText, fontSize: 11.5),
@@ -257,18 +272,18 @@ class ProfileScreen extends ConsumerWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.secondarySurface,
-        title: const Text(
+        title: Text(
           'Log out?',
           style: TextStyle(color: AppColors.primaryText),
         ),
-        content: const Text(
+        content: Text(
           'You will return to the home screen as a guest.',
           style: TextStyle(color: AppColors.secondaryText),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text(
+            child: Text(
               'Cancel',
               style: TextStyle(color: AppColors.secondaryText),
             ),
@@ -297,7 +312,7 @@ class ProfileScreen extends ConsumerWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.secondarySurface,
-        title: const Text(
+        title: Text(
           'Change Password',
           style: TextStyle(color: AppColors.primaryText),
         ),
@@ -308,14 +323,14 @@ class ProfileScreen extends ConsumerWidget {
               TextField(
                 controller: currentController,
                 obscureText: true,
-                style: const TextStyle(color: AppColors.primaryText),
+                style: TextStyle(color: AppColors.primaryText),
                 decoration: const InputDecoration(hintText: 'Current password'),
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: newController,
                 obscureText: true,
-                style: const TextStyle(color: AppColors.primaryText),
+                style: TextStyle(color: AppColors.primaryText),
                 decoration: const InputDecoration(
                   hintText: 'New password (min 6 chars)',
                 ),
@@ -324,7 +339,7 @@ class ProfileScreen extends ConsumerWidget {
               TextField(
                 controller: confirmController,
                 obscureText: true,
-                style: const TextStyle(color: AppColors.primaryText),
+                style: TextStyle(color: AppColors.primaryText),
                 decoration: const InputDecoration(
                   hintText: 'Confirm new password',
                 ),
@@ -335,7 +350,7 @@ class ProfileScreen extends ConsumerWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text(
+            child: Text(
               'Cancel',
               style: TextStyle(color: AppColors.secondaryText),
             ),
@@ -345,7 +360,7 @@ class ProfileScreen extends ConsumerWidget {
               final newPass = newController.text;
               if (newPass.length < 6) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
+                  SnackBar(
                     content: Text(
                       'New password must be at least 6 characters.',
                     ),
@@ -356,7 +371,7 @@ class ProfileScreen extends ConsumerWidget {
               }
               if (newPass != confirmController.text) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
+                  SnackBar(
                     content: Text('Passwords do not match.'),
                     backgroundColor: AppColors.error,
                   ),
@@ -370,7 +385,7 @@ class ProfileScreen extends ConsumerWidget {
                 if (ctx.mounted) Navigator.pop(ctx);
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
+                    SnackBar(
                       content: Text('Password updated successfully.'),
                       backgroundColor: AppColors.success,
                     ),
@@ -441,7 +456,7 @@ class _MenuTile extends StatelessWidget {
         ),
         title: Text(
           title,
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColors.primaryText,
             fontWeight: FontWeight.w600,
             fontSize: 14.5,
@@ -449,9 +464,9 @@ class _MenuTile extends StatelessWidget {
         ),
         subtitle: Text(
           subtitle,
-          style: const TextStyle(color: AppColors.tertiaryText, fontSize: 12),
+          style: TextStyle(color: AppColors.tertiaryText, fontSize: 12),
         ),
-        trailing: const Icon(
+        trailing: Icon(
           Icons.chevron_right,
           color: AppColors.tertiaryText,
           size: 22,

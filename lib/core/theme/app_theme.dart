@@ -1,70 +1,78 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import '../constants/app_colors.dart';
 
+/// Ascended Athletics themes.
+///
+/// [darkTheme] is the original purple-on-black colourway and is the default.
+/// [lightTheme] keeps the same purple accents on lavender surfaces. Both are
+/// generated from an explicit [AppPalette] so they never depend on the
+/// mutable global state used by [AppColors].
 class AppTheme {
-  /// Cream / dark-green minimalist storefront theme.
-  ///
-  /// The getter is still named [darkTheme] for backwards compatibility with
-  /// existing call sites and tests, but the palette is intentionally light.
-  static ThemeData get darkTheme => lightTheme;
+  AppTheme._();
 
-  static ThemeData get lightTheme {
-    const colorScheme = ColorScheme.light(
-      primary: AppColors.primaryAccent,
-      onPrimary: AppColors.onAccent,
-      secondary: AppColors.lightAccent,
-      onSecondary: AppColors.onAccent,
-      surface: AppColors.secondarySurface,
-      onSurface: AppColors.primaryText,
-      error: AppColors.error,
-      onError: AppColors.onAccent,
-      outline: AppColors.borderLight,
-      outlineVariant: AppColors.border,
-      surfaceContainerHighest: AppColors.cardSurface,
+  static ThemeData get darkTheme => _build(AppPalette.dark, Brightness.dark);
+
+  static ThemeData get lightTheme => _build(AppPalette.light, Brightness.light);
+
+  static ThemeData _build(AppPalette c, Brightness brightness) {
+    final colorScheme = ColorScheme(
+      brightness: brightness,
+      primary: c.primaryAccent,
+      onPrimary: c.onAccent,
+      secondary: c.lightAccent,
+      onSecondary: c.onAccent,
+      error: c.error,
+      onError: c.onAccent,
+      surface: c.secondarySurface,
+      onSurface: c.primaryText,
+      outline: c.borderLight,
+      outlineVariant: c.border,
+      surfaceContainerHighest: c.cardSurface,
     );
 
     final baseText = GoogleFonts.interTextTheme(
-      const TextTheme(
+      TextTheme(
         displayLarge: TextStyle(
-          color: AppColors.primaryText,
+          color: c.primaryText,
           fontWeight: FontWeight.w700,
           fontSize: 32,
           letterSpacing: -0.6,
         ),
         displayMedium: TextStyle(
-          color: AppColors.primaryText,
+          color: c.primaryText,
           fontWeight: FontWeight.w700,
           fontSize: 28,
           letterSpacing: -0.4,
         ),
         headlineLarge: TextStyle(
-          color: AppColors.primaryText,
+          color: c.primaryText,
           fontWeight: FontWeight.w700,
           fontSize: 24,
           letterSpacing: -0.3,
         ),
         headlineMedium: TextStyle(
-          color: AppColors.primaryText,
+          color: c.primaryText,
           fontWeight: FontWeight.w700,
           fontSize: 21,
           letterSpacing: -0.2,
         ),
         titleLarge: TextStyle(
-          color: AppColors.primaryText,
+          color: c.primaryText,
           fontWeight: FontWeight.w600,
           fontSize: 18,
         ),
         titleMedium: TextStyle(
-          color: AppColors.primaryText,
+          color: c.primaryText,
           fontWeight: FontWeight.w600,
           fontSize: 16,
         ),
-        bodyLarge: TextStyle(color: AppColors.primaryText, fontSize: 16),
-        bodyMedium: TextStyle(color: AppColors.secondaryText, fontSize: 14),
-        bodySmall: TextStyle(color: AppColors.tertiaryText, fontSize: 12),
+        bodyLarge: TextStyle(color: c.primaryText, fontSize: 16),
+        bodyMedium: TextStyle(color: c.secondaryText, fontSize: 14),
+        bodySmall: TextStyle(color: c.tertiaryText, fontSize: 12),
         labelSmall: TextStyle(
-          color: AppColors.secondaryText,
+          color: c.secondaryText,
           fontSize: 11,
           fontWeight: FontWeight.w600,
           letterSpacing: 0.6,
@@ -74,76 +82,71 @@ class AppTheme {
 
     return ThemeData(
       useMaterial3: true,
-      brightness: Brightness.light,
-      scaffoldBackgroundColor: AppColors.primaryBackground,
+      brightness: brightness,
+      scaffoldBackgroundColor: c.primaryBackground,
+      canvasColor: c.primaryBackground,
       colorScheme: colorScheme,
       textTheme: baseText,
-      appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.primaryBackground,
-        foregroundColor: AppColors.primaryText,
+      appBarTheme: AppBarTheme(
+        backgroundColor: c.primaryBackground,
+        foregroundColor: c.primaryText,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
         scrolledUnderElevation: 0,
-        iconTheme: IconThemeData(color: AppColors.primaryText),
+        iconTheme: IconThemeData(color: c.primaryText),
         titleTextStyle: TextStyle(
-          color: AppColors.primaryText,
+          color: c.primaryText,
           fontSize: 13,
           fontWeight: FontWeight.w800,
           letterSpacing: 2.2,
         ),
       ),
       cardTheme: CardThemeData(
-        color: AppColors.secondarySurface,
+        color: c.secondarySurface,
         elevation: 0,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: const BorderSide(color: AppColors.border, width: 1),
+          side: BorderSide(color: c.border, width: 1),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.secondarySurface,
-        hintStyle: const TextStyle(color: AppColors.tertiaryText, fontSize: 14),
-        labelStyle: const TextStyle(
-          color: AppColors.secondaryText,
-          fontSize: 14,
-        ),
+        fillColor: c.secondarySurface,
+        hintStyle: TextStyle(color: c.tertiaryText, fontSize: 14),
+        labelStyle: TextStyle(color: c.secondaryText, fontSize: 14),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 16,
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.border),
+          borderSide: BorderSide(color: c.border),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.border),
+          borderSide: BorderSide(color: c.border),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(
-            color: AppColors.primaryAccent,
-            width: 1.5,
-          ),
+          borderSide: BorderSide(color: c.primaryAccent, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.error),
+          borderSide: BorderSide(color: c.error),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.error, width: 1.5),
+          borderSide: BorderSide(color: c.error, width: 1.5),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primaryAccent,
-          foregroundColor: AppColors.onAccent,
-          disabledBackgroundColor: AppColors.borderLight,
-          disabledForegroundColor: Colors.white70,
+          backgroundColor: c.primaryAccent,
+          foregroundColor: c.onAccent,
+          disabledBackgroundColor: c.borderLight,
+          disabledForegroundColor: c.onAccent.withValues(alpha: 0.7),
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(14),
@@ -159,8 +162,8 @@ class AppTheme {
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.primaryAccent,
-          side: const BorderSide(color: AppColors.primaryAccent, width: 1.3),
+          foregroundColor: c.primaryAccent,
+          side: BorderSide(color: c.primaryAccent, width: 1.3),
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(14),
@@ -175,67 +178,74 @@ class AppTheme {
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: AppColors.primaryAccent,
+          foregroundColor: c.primaryAccent,
           textStyle: const TextStyle(fontWeight: FontWeight.w600),
         ),
       ),
       navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: AppColors.secondarySurface,
-        indicatorColor: AppColors.primaryAccent,
+        backgroundColor: c.secondarySurface,
+        indicatorColor: c.primaryAccent,
         elevation: 0,
         height: 70,
         labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
         iconTheme: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return const IconThemeData(color: AppColors.onAccent, size: 23);
+            return IconThemeData(color: c.onAccent, size: 23);
           }
-          return const IconThemeData(
-            color: AppColors.secondaryText,
-            size: 23,
-          );
+          return IconThemeData(color: c.secondaryText, size: 23);
         }),
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return const TextStyle(
-              color: AppColors.primaryAccent,
+            return TextStyle(
+              color: c.primaryAccent,
               fontSize: 11,
               fontWeight: FontWeight.w700,
             );
           }
-          return const TextStyle(
-            color: AppColors.secondaryText,
+          return TextStyle(
+            color: c.secondaryText,
             fontSize: 11,
             fontWeight: FontWeight.w500,
           );
         }),
       ),
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: AppColors.secondarySurface,
-        selectedItemColor: AppColors.primaryAccent,
-        unselectedItemColor: AppColors.secondaryText,
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: c.secondarySurface,
+        selectedItemColor: c.primaryAccent,
+        unselectedItemColor: c.secondaryText,
         type: BottomNavigationBarType.fixed,
         elevation: 8,
       ),
       dialogTheme: DialogThemeData(
-        backgroundColor: AppColors.secondarySurface,
+        backgroundColor: c.secondarySurface,
         surfaceTintColor: Colors.transparent,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       ),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        backgroundColor: brightness == Brightness.dark
+            ? c.cardSurface
+            : c.primaryText,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         contentTextStyle: const TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.w500,
         ),
       ),
-      dividerTheme: const DividerThemeData(
-        color: AppColors.border,
-        thickness: 1,
+      dividerTheme: DividerThemeData(color: c.border, thickness: 1),
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return c.onAccent;
+          }
+          return c.secondaryText;
+        }),
+        trackColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return c.primaryAccent;
+          }
+          return c.borderLight;
+        }),
       ),
     );
   }

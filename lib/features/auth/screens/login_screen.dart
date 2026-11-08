@@ -47,7 +47,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       await ref.read(cartProvider.notifier).reloadForUser();
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text('Welcome back, warrior!'),
           backgroundColor: AppColors.success,
         ),
@@ -100,7 +100,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(color: AppColors.border),
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.bolt_rounded,
                         color: AppColors.primaryAccent,
                         size: 40,
@@ -168,7 +168,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: _showForgotPasswordDialog,
-                      child: const Text(
+                      child: Text(
                         'Forgot Password?',
                         style: TextStyle(color: AppColors.lightAccent),
                       ),
@@ -180,7 +180,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ElevatedButton(
                     onPressed: _isLoading ? null : _login,
                     child: _isLoading
-                        ? const SizedBox(
+                        ? SizedBox(
                             width: 22,
                             height: 22,
                             child: CircularProgressIndicator(
@@ -195,7 +195,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   // Divider
                   Row(
                     children: [
-                      const Expanded(child: Divider(color: AppColors.border)),
+                      Expanded(child: Divider(color: AppColors.border)),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         child: Text(
@@ -203,7 +203,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ),
-                      const Expanded(child: Divider(color: AppColors.border)),
+                      Expanded(child: Divider(color: AppColors.border)),
                     ],
                   ),
                   const SizedBox(height: 20),
@@ -235,7 +235,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             context.go('/register');
                           }
                         },
-                        child: const Text(
+                        child: Text(
                           'Create Account',
                           style: TextStyle(
                             color: AppColors.primaryAccent,
@@ -260,14 +260,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.secondarySurface,
-        title: const Text(
+        title: Text(
           'Reset Password',
           style: TextStyle(color: AppColors.primaryText),
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
+            Text(
               'Enter your email and we will send you a reset link.',
               style: TextStyle(color: AppColors.secondaryText),
             ),
@@ -275,7 +275,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             TextField(
               controller: emailController,
               keyboardType: TextInputType.emailAddress,
-              style: const TextStyle(color: AppColors.primaryText),
+              style: TextStyle(color: AppColors.primaryText),
               decoration: const InputDecoration(hintText: 'you@example.com'),
             ),
           ],
@@ -283,7 +283,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text(
+            child: Text(
               'Cancel',
               style: TextStyle(color: AppColors.secondaryText),
             ),
@@ -297,7 +297,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 if (ctx.mounted) Navigator.pop(ctx);
                 if (mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
+                    SnackBar(
                       content: Text('Password reset email sent.'),
                       backgroundColor: AppColors.success,
                     ),

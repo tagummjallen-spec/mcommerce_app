@@ -47,13 +47,13 @@ class OrderHistoryScreen extends ConsumerWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(
+                Icon(
                   Icons.lock_outline,
                   color: AppColors.primaryAccent,
                   size: 44,
                 ),
                 const SizedBox(height: 16),
-                const Text(
+                Text(
                   'Login Required',
                   style: TextStyle(
                     color: AppColors.primaryText,
@@ -62,7 +62,7 @@ class OrderHistoryScreen extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
+                Text(
                   'Sign in to view your orders.',
                   style: TextStyle(color: AppColors.secondaryText),
                 ),
@@ -86,23 +86,23 @@ class OrderHistoryScreen extends ConsumerWidget {
         title: 'ORDER HISTORY',
       ),
       body: ordersAsync.when(
-        loading: () => const Center(
+        loading: () => Center(
           child: CircularProgressIndicator(color: AppColors.primaryAccent),
         ),
         error: (e, _) => Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.error_outline, color: AppColors.error, size: 42),
+              Icon(Icons.error_outline, color: AppColors.error, size: 42),
               const SizedBox(height: 12),
-              const Text(
+              Text(
                 'Failed to load orders.',
                 style: TextStyle(color: AppColors.secondaryText),
               ),
               const SizedBox(height: 12),
               TextButton(
                 onPressed: () => ref.invalidate(customerOrdersProvider),
-                child: const Text(
+                child: Text(
                   'Retry',
                   style: TextStyle(color: AppColors.primaryAccent),
                 ),
@@ -125,14 +125,14 @@ class OrderHistoryScreen extends ConsumerWidget {
                         shape: BoxShape.circle,
                         border: Border.all(color: AppColors.border),
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.receipt_long_outlined,
                         color: AppColors.primaryAccent,
                         size: 40,
                       ),
                     ),
                     const SizedBox(height: 18),
-                    const Text(
+                    Text(
                       'No orders yet',
                       style: TextStyle(
                         color: AppColors.primaryText,
@@ -141,7 +141,7 @@ class OrderHistoryScreen extends ConsumerWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    const Text(
+                    Text(
                       'Your completed checkouts will appear here.',
                       style: TextStyle(color: AppColors.secondaryText),
                       textAlign: TextAlign.center,
@@ -191,7 +191,7 @@ class OrderHistoryScreen extends ConsumerWidget {
                                 '#${order.id.substring(0, order.id.length > 8 ? 8 : order.id.length).toUpperCase()}',
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   color: AppColors.primaryText,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 13.5,
@@ -229,7 +229,7 @@ class OrderHistoryScreen extends ConsumerWidget {
                         const SizedBox(height: 10),
                         Text(
                           dateStr,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppColors.tertiaryText,
                             fontSize: 12,
                           ),
@@ -248,7 +248,7 @@ class OrderHistoryScreen extends ConsumerWidget {
                                     .join(', '),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   color: AppColors.secondaryText,
                                   fontSize: 13,
                                 ),
@@ -257,7 +257,7 @@ class OrderHistoryScreen extends ConsumerWidget {
                             const SizedBox(width: 8),
                             Text(
                               '${order.itemCount} item${order.itemCount == 1 ? '' : 's'} • ₱${order.total.toStringAsFixed(2)}',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: AppColors.primaryAccent,
                                 fontWeight: FontWeight.w700,
                                 fontSize: 13.5,
@@ -274,14 +274,14 @@ class OrderHistoryScreen extends ConsumerWidget {
                                 'Payment: ${order.paymentMethod} (Simulated)',
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   color: AppColors.tertiaryText,
                                   fontSize: 11.5,
                                 ),
                               ),
                             ),
                             const SizedBox(width: 8),
-                            const Text(
+                            Text(
                               'View details ›',
                               style: TextStyle(
                                 color: AppColors.lightAccent,

@@ -22,7 +22,7 @@ Future<void> showReviewFormDialog({
       backgroundColor: AppColors.secondarySurface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
-        side: const BorderSide(color: AppColors.border),
+        side: BorderSide(color: AppColors.border),
       ),
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 480),
@@ -127,7 +127,7 @@ Future<void> showExistingReviewDialog({
       backgroundColor: AppColors.secondarySurface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
-        side: const BorderSide(color: AppColors.border),
+        side: BorderSide(color: AppColors.border),
       ),
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 440),
@@ -141,7 +141,7 @@ Future<void> showExistingReviewDialog({
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                    Text(
                       'YOUR REVIEW',
                       style: TextStyle(
                         color: AppColors.secondaryText,
@@ -165,7 +165,7 @@ Future<void> showExistingReviewDialog({
                   review.comment.trim().isEmpty
                       ? 'No written comment.'
                       : review.comment,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.secondaryText,
                     height: 1.5,
                     fontSize: 14,
@@ -174,7 +174,7 @@ Future<void> showExistingReviewDialog({
                 const SizedBox(height: 12),
                 Text(
                   'Submitted ${review.createdAt.month}/${review.createdAt.day}/${review.createdAt.year}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.tertiaryText,
                     fontSize: 11.5,
                   ),

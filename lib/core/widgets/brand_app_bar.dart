@@ -74,7 +74,7 @@ class BrandAppBar extends ConsumerWidget implements PreferredSizeWidget {
                 color: AppColors.primaryAccent,
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.bolt_rounded,
                 color: AppColors.onAccent,
                 size: 14,

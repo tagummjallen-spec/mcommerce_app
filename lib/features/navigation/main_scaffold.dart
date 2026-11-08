@@ -22,7 +22,7 @@ class MainScaffold extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: AppColors.secondarySurface,
           border: Border(top: BorderSide(color: AppColors.border, width: 1)),
         ),

@@ -25,11 +25,11 @@ class WishlistScreen extends ConsumerWidget {
               onLogin: () => context.go('/login'),
             )
           : wishlistAsync.when(
-              loading: () => const Center(
+              loading: () => Center(
                 child: CircularProgressIndicator(
                     color: AppColors.primaryAccent),
               ),
-              error: (e, _) => const Center(
+              error: (e, _) => Center(
                 child: Text('Failed to load wishlist.',
                     style: TextStyle(color: AppColors.secondaryText)),
               ),
@@ -48,14 +48,14 @@ class WishlistScreen extends ConsumerWidget {
                               shape: BoxShape.circle,
                               border: Border.all(color: AppColors.border),
                             ),
-                            child: const Icon(
+                            child: Icon(
                               Icons.favorite_outline,
                               color: AppColors.primaryAccent,
                               size: 40,
                             ),
                           ),
                           const SizedBox(height: 20),
-                          const Text(
+                          Text(
                             'Your wishlist is empty',
                             style: TextStyle(
                               color: AppColors.primaryText,
@@ -64,7 +64,7 @@ class WishlistScreen extends ConsumerWidget {
                             ),
                           ),
                           const SizedBox(height: 8),
-                          const Text(
+                          Text(
                             'Tap the heart on any product to save it here.',
                             style: TextStyle(color: AppColors.secondaryText),
                             textAlign: TextAlign.center,
@@ -107,7 +107,7 @@ class WishlistScreen extends ConsumerWidget {
                                     .withValues(alpha: 0.75),
                                 shape: BoxShape.circle,
                               ),
-                              child: const Icon(
+                              child: Icon(
                                 Icons.favorite,
                                 color: AppColors.error,
                                 size: 18,
@@ -146,14 +146,14 @@ class _LoginGate extends StatelessWidget {
                 shape: BoxShape.circle,
                 border: Border.all(color: AppColors.border),
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.lock_outline,
                 color: AppColors.primaryAccent,
                 size: 40,
               ),
             ),
             const SizedBox(height: 20),
-            const Text(
+            Text(
               'Login Required',
               style: TextStyle(
                 color: AppColors.primaryText,
@@ -164,7 +164,7 @@ class _LoginGate extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               message,
-              style: const TextStyle(color: AppColors.secondaryText),
+              style: TextStyle(color: AppColors.secondaryText),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 22),
@@ -174,7 +174,7 @@ class _LoginGate extends StatelessWidget {
             ),
             TextButton(
               onPressed: () => context.go('/register'),
-              child: const Text(
+              child: Text(
                 'Create an account',
                 style: TextStyle(color: AppColors.lightAccent),
               ),

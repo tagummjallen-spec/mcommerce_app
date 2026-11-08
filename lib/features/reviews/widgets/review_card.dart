@@ -29,7 +29,7 @@ class ReviewCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   review.userName,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.primaryText,
                     fontWeight: FontWeight.w600,
                   ),
@@ -38,7 +38,7 @@ class ReviewCard extends StatelessWidget {
               ),
               Text(
                 _formatDate(review.createdAt),
-                style: const TextStyle(
+                style: TextStyle(
                   color: AppColors.tertiaryText,
                   fontSize: 11,
                 ),
@@ -51,7 +51,7 @@ class ReviewCard extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               review.comment,
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.secondaryText,
                 height: 1.4,
               ),

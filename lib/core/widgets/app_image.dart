@@ -71,7 +71,7 @@ class AppImage extends StatelessWidget {
           if (progress == null) return child;
           return ColoredBox(
             color: AppColors.cardSurface,
-            child: const Center(
+            child: Center(
               child: SizedBox(
                 width: 20,
                 height: 20,

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../constants/app_colors.dart';
+import '../widgets/palette_scope.dart';
 import '../../features/auth/screens/splash_screen.dart';
 import '../../features/auth/screens/login_screen.dart';
 import '../../features/auth/screens/register_screen.dart';
@@ -22,6 +24,15 @@ import '../../features/support/screens/support_chat_screen.dart';
 
 final rootNavigatorKey = GlobalKey<NavigatorState>();
 
+/// Wraps a page so its content is rebuilt whenever the active palette changes.
+///
+/// Screens read the runtime `AppColors` global rather than an inherited
+/// [Theme], so Flutter would otherwise reuse their (often `const`) widgets
+/// unchanged when the user flips the light/dark switch. [PaletteScope]
+/// subscribes to the Riverpod theme provider and re-creates the page subtree
+/// with the palette the root widget applied for this frame.
+Widget _paletteScoped(Widget child) => PaletteScope(child: child);
+
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     navigatorKey: rootNavigatorKey,
@@ -29,15 +40,15 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(
         path: '/',
-        builder: (context, state) => const SplashScreen(),
+        builder: (context, state) => _paletteScoped(const SplashScreen()),
       ),
       GoRoute(
         path: '/login',
-        builder: (context, state) => const LoginScreen(),
+        builder: (context, state) => _paletteScoped(const LoginScreen()),
       ),
       GoRoute(
         path: '/register',
-        builder: (context, state) => const RegisterScreen(),
+        builder: (context, state) => _paletteScoped(const RegisterScreen()),
       ),
       // Shell with bottom navigation bar
       StatefulShellRoute.indexedStack(
@@ -49,7 +60,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: '/home',
-                builder: (context, state) => const HomeScreen(),
+                builder: (context, state) => _paletteScoped(const HomeScreen()),
               ),
             ],
           ),
@@ -57,12 +68,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: '/shop',
-                builder: (context, state) => const ShopScreen(),
+                builder: (context, state) => _paletteScoped(const ShopScreen()),
                 routes: [
                   GoRoute(
                     path: 'product/:productId',
-                    builder: (context, state) => ProductDetailsScreen(
-                      productId: state.pathParameters['productId']!,
+                    builder: (context, state) => _paletteScoped(
+                      ProductDetailsScreen(
+                        productId: state.pathParameters['productId']!,
+                      ),
                     ),
                   ),
                 ],
@@ -73,7 +86,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: '/wishlist',
-                builder: (context, state) => const WishlistScreen(),
+                builder: (context, state) =>
+                    _paletteScoped(const WishlistScreen()),
               ),
             ],
           ),
@@ -81,27 +95,33 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: '/profile',
-                builder: (context, state) => const ProfileScreen(),
+                builder: (context, state) =>
+                    _paletteScoped(const ProfileScreen()),
                 routes: [
                   GoRoute(
                     path: 'orders',
-                    builder: (context, state) => const OrderHistoryScreen(),
+                    builder: (context, state) =>
+                        _paletteScoped(const OrderHistoryScreen()),
                     routes: [
                       GoRoute(
                         path: 'order-details/:orderId',
-                        builder: (context, state) => OrderDetailsScreen(
-                          orderId: state.pathParameters['orderId']!,
+                        builder: (context, state) => _paletteScoped(
+                          OrderDetailsScreen(
+                            orderId: state.pathParameters['orderId']!,
+                          ),
                         ),
                       ),
                     ],
                   ),
                   GoRoute(
                     path: 'edit',
-                    builder: (context, state) => const EditProfileScreen(),
+                    builder: (context, state) =>
+                        _paletteScoped(const EditProfileScreen()),
                   ),
                   GoRoute(
                     path: 'notifications',
-                    builder: (context, state) => const NotificationsScreen(),
+                    builder: (context, state) =>
+                        _paletteScoped(const NotificationsScreen()),
                   ),
                 ],
               ),
@@ -113,24 +133,24 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/cart',
         parentNavigatorKey: rootNavigatorKey,
-        builder: (context, state) => const CartScreen(),
+        builder: (context, state) => _paletteScoped(const CartScreen()),
       ),
       GoRoute(
         path: '/checkout',
         parentNavigatorKey: rootNavigatorKey,
-        builder: (context, state) => const CheckoutScreen(),
+        builder: (context, state) => _paletteScoped(const CheckoutScreen()),
       ),
       GoRoute(
         path: '/order-confirmation/:orderId',
         parentNavigatorKey: rootNavigatorKey,
-        builder: (context, state) => CheckoutSuccessScreen(
-          orderId: state.pathParameters['orderId']!,
+        builder: (context, state) => _paletteScoped(
+          CheckoutSuccessScreen(orderId: state.pathParameters['orderId']!),
         ),
       ),
       GoRoute(
         path: '/support',
         parentNavigatorKey: rootNavigatorKey,
-        builder: (context, state) => const SupportChatScreen(),
+        builder: (context, state) => _paletteScoped(const SupportChatScreen()),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(
@@ -139,7 +159,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline, color: AppColors.error, size: 48),
+            Icon(Icons.error_outline, color: AppColors.error, size: 48),
             const SizedBox(height: 16),
             Text(
               'Page not found',

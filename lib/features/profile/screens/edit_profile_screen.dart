@@ -258,14 +258,14 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                   ],
                                 ),
                                 child: _isPickingImage
-                                    ? const Padding(
+                                    ? Padding(
                                         padding: EdgeInsets.all(9),
                                         child: CircularProgressIndicator(
                                           strokeWidth: 2,
                                           color: AppColors.onAccent,
                                         ),
                                       )
-                                    : const Icon(
+                                    : Icon(
                                         Icons.photo_camera_rounded,
                                         color: AppColors.onAccent,
                                         size: 18,
@@ -301,7 +301,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                           onPressed: _profileImageUrl.isEmpty
                               ? null
                               : _removePhoto,
-                          child: const Text(
+                          child: Text(
                             'Remove',
                             style: TextStyle(
                               color: AppColors.error,
@@ -322,7 +322,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       child: TextFormField(
                         controller: _nameController,
                         textInputAction: TextInputAction.next,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.primaryText,
                           fontSize: 15,
                         ),
@@ -344,7 +344,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                         controller: _phoneController,
                         keyboardType: TextInputType.phone,
                         textInputAction: TextInputAction.next,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.primaryText,
                           fontSize: 15,
                         ),
@@ -365,13 +365,13 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                         controller: _emailController,
                         readOnly: true,
                         enabled: false,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.secondaryText,
                           fontSize: 15,
                         ),
                         decoration: _underlineDecoration(
                           hint: 'you@example.com',
-                          suffixIcon: const Icon(
+                          suffixIcon: Icon(
                             Icons.lock_outline_rounded,
                             size: 18,
                             color: AppColors.tertiaryText,
@@ -391,7 +391,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       child: TextFormField(
                         controller: _streetController,
                         textInputAction: TextInputAction.next,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.primaryText,
                           fontSize: 15,
                         ),
@@ -406,7 +406,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       child: TextFormField(
                         controller: _barangayController,
                         textInputAction: TextInputAction.done,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.primaryText,
                           fontSize: 15,
                         ),
@@ -416,7 +416,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    const Row(
+                    Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Icon(
@@ -445,7 +445,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       child: ElevatedButton(
                         onPressed: _isLoading ? null : _save,
                         child: _isLoading
-                            ? const SizedBox(
+                            ? SizedBox(
                                 width: 22,
                                 height: 22,
                                 child: CircularProgressIndicator(
@@ -468,7 +468,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     Widget? suffixIcon,
     String? helper,
   }) {
-    const underline = UnderlineInputBorder(
+    final underline = UnderlineInputBorder(
       borderSide: BorderSide(color: AppColors.borderLight),
     );
     return InputDecoration(
@@ -480,8 +480,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       suffixIcon: suffixIcon,
       suffixIconConstraints: const BoxConstraints(minWidth: 32),
       contentPadding: const EdgeInsets.symmetric(vertical: 10),
-      hintStyle: const TextStyle(color: AppColors.tertiaryText, fontSize: 15),
-      helperStyle: const TextStyle(
+      hintStyle: TextStyle(color: AppColors.tertiaryText, fontSize: 15),
+      helperStyle: TextStyle(
         color: AppColors.tertiaryText,
         fontSize: 11.5,
         height: 1.35,
@@ -489,7 +489,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       border: underline,
       enabledBorder: underline,
       disabledBorder: underline,
-      focusedBorder: const UnderlineInputBorder(
+      focusedBorder: UnderlineInputBorder(
         borderSide: BorderSide(color: AppColors.primaryAccent, width: 1.6),
       ),
     );
@@ -505,7 +505,7 @@ class _SectionLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text.toUpperCase(),
-      style: const TextStyle(
+      style: TextStyle(
         color: AppColors.secondaryText,
         fontSize: 11,
         fontWeight: FontWeight.w800,
@@ -528,7 +528,7 @@ class _UnderlinedField extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColors.tertiaryText,
             fontSize: 12,
             fontWeight: FontWeight.w600,
@@ -554,13 +554,13 @@ class _SignInGate extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
+            Icon(
               Icons.person_outline_rounded,
               size: 44,
               color: AppColors.primaryAccent,
             ),
             const SizedBox(height: 16),
-            const Text(
+            Text(
               'Sign in to edit your profile',
               style: TextStyle(
                 color: AppColors.primaryText,
@@ -569,7 +569,7 @@ class _SignInGate extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            const Text(
+            Text(
               'Your saved delivery details are tied to your account.',
               textAlign: TextAlign.center,
               style: TextStyle(color: AppColors.secondaryText),

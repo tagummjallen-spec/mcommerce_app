@@ -57,7 +57,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                 borderRadius: BorderRadius.circular(24),
                 border: Border.all(color: AppColors.border),
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.bolt_rounded,
                 color: AppColors.primaryAccent,
                 size: 56,
@@ -78,7 +78,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 40),
-            const SizedBox(
+            SizedBox(
               width: 28,
               height: 28,
               child: CircularProgressIndicator(

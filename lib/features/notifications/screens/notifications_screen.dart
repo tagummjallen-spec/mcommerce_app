@@ -59,18 +59,18 @@ class NotificationsScreen extends ConsumerWidget {
         ],
       ),
       body: notificationsAsync.when(
-        loading: () => const Center(
+        loading: () => Center(
           child: CircularProgressIndicator(color: AppColors.primaryAccent),
         ),
         error: (e, _) => Center(
           child: Text(
             'Failed to load notifications: $e',
-            style: const TextStyle(color: AppColors.error),
+            style: TextStyle(color: AppColors.error),
           ),
         ),
         data: (notifications) {
           if (notifications.isEmpty) {
-            return const Center(
+            return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -171,7 +171,7 @@ class _NotificationTile extends StatelessWidget {
                       ),
                       Text(
                         timeLabel,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.tertiaryText,
                           fontSize: 11,
                         ),
@@ -181,7 +181,7 @@ class _NotificationTile extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     notification.body,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.secondaryText,
                       height: 1.3,
                     ),
@@ -194,7 +194,7 @@ class _NotificationTile extends StatelessWidget {
                 width: 8,
                 height: 8,
                 margin: const EdgeInsets.only(left: 8, top: 6),
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   color: AppColors.primaryAccent,
                   shape: BoxShape.circle,
                 ),

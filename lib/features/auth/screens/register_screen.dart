@@ -52,7 +52,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       await ref.read(cartProvider.notifier).reloadForUser();
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text('Account created. Welcome to Ascended Athletics!'),
           backgroundColor: AppColors.success,
         ),
@@ -204,7 +204,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 ElevatedButton(
                   onPressed: _isLoading ? null : _register,
                   child: _isLoading
-                      ? const SizedBox(
+                      ? SizedBox(
                           width: 22,
                           height: 22,
                           child: CircularProgressIndicator(
@@ -228,7 +228,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     ),
                     TextButton(
                       onPressed: () => context.go('/login'),
-                      child: const Text(
+                      child: Text(
                         'Login',
                         style: TextStyle(
                           color: AppColors.primaryAccent,

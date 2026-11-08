@@ -44,18 +44,18 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.secondarySurface,
-        title: const Text(
+        title: Text(
           'Cancel this order?',
           style: TextStyle(color: AppColors.primaryText),
         ),
-        content: const Text(
+        content: Text(
           'The order status will change to Cancelled. This cannot be undone.',
           style: TextStyle(color: AppColors.secondaryText),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text(
+            child: Text(
               'Keep Order',
               style: TextStyle(color: AppColors.secondaryText),
             ),
@@ -78,7 +78,7 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
       ref.invalidate(customerOrdersProvider);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Text('Order cancelled.'),
             backgroundColor: AppColors.success,
           ),
@@ -110,24 +110,24 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
         title: 'ORDER DETAILS',
       ),
       body: orderAsync.when(
-        loading: () => const Center(
+        loading: () => Center(
           child: CircularProgressIndicator(color: AppColors.primaryAccent),
         ),
         error: (e, _) => Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.error_outline, color: AppColors.error, size: 42),
+              Icon(Icons.error_outline, color: AppColors.error, size: 42),
               const SizedBox(height: 12),
               Text(
                 'Failed to load order: $e',
                 textAlign: TextAlign.center,
-                style: const TextStyle(color: AppColors.secondaryText),
+                style: TextStyle(color: AppColors.secondaryText),
               ),
               const SizedBox(height: 12),
               TextButton(
                 onPressed: () => ref.invalidate(orderProvider(widget.orderId)),
-                child: const Text(
+                child: Text(
                   'Retry',
                   style: TextStyle(color: AppColors.primaryAccent),
                 ),
@@ -137,7 +137,7 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
         ),
         data: (order) {
           if (order == null) {
-            return const Center(
+            return Center(
               child: Text(
                 'Order not found.',
                 style: TextStyle(color: AppColors.secondaryText),
@@ -174,7 +174,7 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
                               '#${order.id.substring(0, order.id.length > 8 ? 8 : order.id.length).toUpperCase()}',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: AppColors.primaryText,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15,
@@ -213,7 +213,7 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
                       Text(
                         DateFormat('MMMM d, yyyy • h:mm a')
                             .format(order.createdAt),
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.tertiaryText,
                           fontSize: 12.5,
                         ),
@@ -221,7 +221,7 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
                       const SizedBox(height: 6),
                       Text(
                         'Payment: ${order.paymentMethod} (Simulated)',
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.secondaryText,
                           fontSize: 13,
                         ),
@@ -235,7 +235,7 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
                 // ===== Items =====
                 Text(
                   'ITEMS (${order.itemCount})',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.secondaryText,
                     fontWeight: FontWeight.bold,
                     fontSize: 12,
@@ -272,7 +272,7 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
                                   child: () {
                                     final path = item.productImage.trim();
                                     if (path.isEmpty) {
-                                      return const Center(
+                                      return Center(
                                         child: Icon(
                                           Icons.sports_martial_arts,
                                           size: 20,
@@ -291,7 +291,7 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
                                             ),
                                             fit: BoxFit.cover,
                                             errorBuilder: (_, _, _) =>
-                                                const Center(
+                                                Center(
                                                   child: Icon(
                                                     Icons.sports_martial_arts,
                                                     size: 20,
@@ -304,7 +304,7 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
                                       } catch (e) {
                                         debugPrint('DATA URL IMAGE ERROR: $e');
                                       }
-                                      return const Center(
+                                      return Center(
                                         child: Icon(
                                           Icons.sports_martial_arts,
                                           size: 20,
@@ -316,7 +316,7 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
                                       return Image.asset(
                                         path,
                                         fit: BoxFit.cover,
-                                        errorBuilder: (_, _, _) => const Center(
+                                        errorBuilder: (_, _, _) => Center(
                                           child: Icon(
                                             Icons.sports_martial_arts,
                                             size: 20,
@@ -329,7 +329,7 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
                                       return Image.network(
                                         path,
                                         fit: BoxFit.cover,
-                                        errorBuilder: (_, _, _) => const Center(
+                                        errorBuilder: (_, _, _) => Center(
                                           child: Icon(
                                             Icons.sports_martial_arts,
                                             size: 20,
@@ -338,7 +338,7 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
                                         ),
                                       );
                                     }
-                                    return const Center(
+                                    return Center(
                                       child: Icon(
                                         Icons.sports_martial_arts,
                                         size: 20,
@@ -357,7 +357,7 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
                                         item.productName,
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           color: AppColors.primaryText,
                                           fontWeight: FontWeight.w600,
                                           fontSize: 13.5,
@@ -366,7 +366,7 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
                                       const SizedBox(height: 3),
                                       Text(
                                         '${item.selectedSize} · ${item.selectedColor}  •  Qty ${item.quantity}',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           color: AppColors.secondaryText,
                                           fontSize: 12,
                                         ),
@@ -376,7 +376,7 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
                                 ),
                                 Text(
                                   '₱${item.totalPrice.toStringAsFixed(2)}',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     color: AppColors.primaryText,
                                     fontWeight: FontWeight.w600,
                                     fontSize: 13.5,
@@ -433,7 +433,7 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
+                          Text(
                             'TOTAL',
                             style: TextStyle(
                               color: AppColors.primaryText,
@@ -443,7 +443,7 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
                           ),
                           Text(
                             '₱${order.total.toStringAsFixed(2)}',
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: AppColors.primaryAccent,
                               fontWeight: FontWeight.w800,
                               fontSize: 17,
@@ -460,7 +460,7 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
                 // ===== Shipping address =====
                 Text(
                   'SHIPPING ADDRESS',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.secondaryText,
                     fontWeight: FontWeight.bold,
                     fontSize: 12,
@@ -481,7 +481,7 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
                     children: [
                       Text(
                         order.shippingAddress.fullName,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.primaryText,
                           fontWeight: FontWeight.w600,
                         ),
@@ -489,7 +489,7 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
                       const SizedBox(height: 4),
                       Text(
                         order.shippingAddress.fullAddress,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.secondaryText,
                           fontSize: 13,
                         ),
@@ -497,7 +497,7 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
                       const SizedBox(height: 4),
                       Text(
                         '${order.shippingAddress.phone} • ${order.shippingAddress.email}',
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.tertiaryText,
                           fontSize: 12.5,
                         ),
@@ -517,7 +517,7 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
                           ? null
                           : () => _cancelOrder(order),
                       icon: _isCancelling
-                          ? const SizedBox(
+                          ? SizedBox(
                               width: 16,
                               height: 16,
                               child: CircularProgressIndicator(
@@ -531,7 +531,7 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
                       ),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: AppColors.error,
-                        side: const BorderSide(
+                        side: BorderSide(
                           color: AppColors.error,
                           width: 1.4,
                         ),
@@ -543,7 +543,7 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
                   Center(
                     child: Text(
                       'This order is ${order.status.toLowerCase()} and can no longer be cancelled.',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.tertiaryText,
                         fontSize: 12.5,
                       ),
@@ -623,7 +623,7 @@ class _Line extends StatelessWidget {
               label,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.secondaryText,
                 fontSize: 13.5,
               ),

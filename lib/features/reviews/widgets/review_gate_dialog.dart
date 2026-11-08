@@ -12,7 +12,7 @@ Future<void> showReviewGateDialog(BuildContext context) {
       backgroundColor: AppColors.secondarySurface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
-        side: const BorderSide(color: AppColors.border),
+        side: BorderSide(color: AppColors.border),
       ),
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 420),
@@ -32,14 +32,14 @@ Future<void> showReviewGateDialog(BuildContext context) {
                       color: AppColors.primaryAccent.withValues(alpha: 0.35),
                     ),
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.verified_user_outlined,
                     color: AppColors.primaryAccent,
                     size: 34,
                   ),
                 ),
                 const SizedBox(height: 20),
-                const Text(
+                Text(
                   'VERIFIED REVIEWS ONLY',
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -50,7 +50,7 @@ Future<void> showReviewGateDialog(BuildContext context) {
                   ),
                 ),
                 const SizedBox(height: 10),
-                const Text(
+                Text(
                   'Reviews come after delivery. You can review this product '
                   'once an order containing it is completed. Thanks for helping '
                   'us keep reviews verified.',

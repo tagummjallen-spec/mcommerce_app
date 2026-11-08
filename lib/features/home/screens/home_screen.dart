@@ -54,7 +54,7 @@ class HomeScreen extends ConsumerWidget {
                     children: [
                       Text(
                         isGuest ? 'Welcome, guest' : 'Welcome back',
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.primaryText,
                           fontWeight: FontWeight.w800,
                           fontSize: 22,
@@ -62,7 +62,7 @@ class HomeScreen extends ConsumerWidget {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      const Text(
+                      Text(
                         'Gear engineered for combat and everyday training.',
                         style: TextStyle(
                           color: AppColors.secondaryText,
@@ -227,7 +227,7 @@ class _ProductRowSkeleton extends StatelessWidget {
             borderRadius: BorderRadius.circular(14),
             border: Border.all(color: AppColors.border),
           ),
-          child: const Center(
+          child: Center(
             child: SizedBox(
               width: 24,
               height: 24,
@@ -260,7 +260,7 @@ class _EmptyState extends StatelessWidget {
       ),
       child: Text(
         message,
-        style: const TextStyle(color: AppColors.secondaryText),
+        style: TextStyle(color: AppColors.secondaryText),
       ),
     );
   }
@@ -284,13 +284,13 @@ class _ErrorState extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const Icon(Icons.wifi_off_rounded, color: AppColors.error, size: 32),
+          Icon(Icons.wifi_off_rounded, color: AppColors.error, size: 32),
           const SizedBox(height: 8),
-          Text(message, style: const TextStyle(color: AppColors.secondaryText)),
+          Text(message, style: TextStyle(color: AppColors.secondaryText)),
           const SizedBox(height: 12),
           TextButton(
             onPressed: onRetry,
-            child: const Text(
+            child: Text(
               'Retry',
               style: TextStyle(color: AppColors.primaryAccent),
             ),

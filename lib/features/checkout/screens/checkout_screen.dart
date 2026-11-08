@@ -247,13 +247,13 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.shopping_bag_outlined,
                     color: AppColors.tertiaryText,
                     size: 48,
                   ),
                   const SizedBox(height: 14),
-                  const Text(
+                  Text(
                     'Nothing to checkout.',
                     style: TextStyle(color: AppColors.secondaryText),
                   ),
@@ -286,13 +286,13 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                         ),
                         child: Row(
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.info_outline,
                               color: AppColors.warning,
                               size: 20,
                             ),
                             const SizedBox(width: 10),
-                            const Expanded(
+                            Expanded(
                               child: Text(
                                 'You are checking out as a guest. You will be asked to sign in before the order is placed.',
                                 style: TextStyle(
@@ -429,7 +429,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    const Text(
+                    Text(
                       'No real payment will be processed. This is an academic simulation only.',
                       style: TextStyle(
                         color: AppColors.tertiaryText,
@@ -451,7 +451,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             'ORDER SUMMARY',
                             style: TextStyle(
                               color: AppColors.secondaryText,
@@ -470,7 +470,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                   Expanded(
                                     child: Text(
                                       '${item.quantity}× ${item.productName} (${item.selectedSize}/${item.selectedColor})',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         color: AppColors.primaryText,
                                         fontSize: 13,
                                       ),
@@ -479,7 +479,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                   const SizedBox(width: 8),
                                   Text(
                                     '₱${item.totalPrice.toStringAsFixed(2)}',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       color: AppColors.secondaryText,
                                       fontSize: 13,
                                     ),
@@ -506,7 +506,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text(
+                              Text(
                                 'TOTAL',
                                 style: TextStyle(
                                   color: AppColors.primaryText,
@@ -516,7 +516,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                               ),
                               Text(
                                 '₱${_total.toStringAsFixed(2)}',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   color: AppColors.primaryAccent,
                                   fontWeight: FontWeight.w800,
                                   fontSize: 17,
@@ -538,7 +538,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                             ? null
                             : _requireAuthThenPlaceOrder,
                         child: _isPlacingOrder
-                            ? const SizedBox(
+                            ? SizedBox(
                                 width: 22,
                                 height: 22,
                                 child: CircularProgressIndicator(
@@ -554,7 +554,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                       ),
                     ),
                     const SizedBox(height: 12),
-                    const Center(
+                    Center(
                       child: Text(
                         'By confirming you agree to the simulated order terms.\nOrders begin as "Pending".',
                         textAlign: TextAlign.center,
@@ -584,7 +584,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColors.secondaryText,
             fontSize: 12.5,
             fontWeight: FontWeight.w600,
@@ -595,7 +595,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           controller: controller,
           keyboardType: keyboardType,
           validator: validator,
-          style: const TextStyle(color: AppColors.primaryText, fontSize: 14.5),
+          style: TextStyle(color: AppColors.primaryText, fontSize: 14.5),
           decoration: InputDecoration(
             hintText: hint,
             prefixIcon: Icon(icon, size: 19, color: AppColors.secondaryText),
@@ -629,7 +629,7 @@ class _SummaryLine extends StatelessWidget {
               label,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.secondaryText,
                 fontSize: 13,
               ),
@@ -703,7 +703,7 @@ class _PaymentOption extends StatelessWidget {
             ),
             Text(
               subtitle,
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.tertiaryText,
                 fontSize: 11,
               ),
