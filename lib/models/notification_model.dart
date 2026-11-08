@@ -9,6 +9,9 @@ class NotificationModel {
   final bool read;
   final DateTime createdAt;
 
+  /// Related order id for order-status notifications, if any.
+  final String? orderId;
+
   NotificationModel({
     required this.id,
     required this.userId,
@@ -17,6 +20,7 @@ class NotificationModel {
     required this.type,
     required this.read,
     required this.createdAt,
+    this.orderId,
   });
 
   factory NotificationModel.fromMap(Map<String, dynamic> map, String id) {
@@ -28,6 +32,8 @@ class NotificationModel {
           DateTime.tryParse(map['createdAt'].toString()) ?? DateTime.now();
     }
 
+    final rawOrderId = map['orderId']?.toString().trim();
+
     return NotificationModel(
       id: id,
       userId: map['userId']?.toString() ?? '',
@@ -36,6 +42,7 @@ class NotificationModel {
       type: map['type']?.toString() ?? 'system',
       read: map['read'] is bool ? map['read'] as bool : false,
       createdAt: parsedCreatedAt,
+      orderId: (rawOrderId == null || rawOrderId.isEmpty) ? null : rawOrderId,
     );
   }
 
@@ -47,6 +54,7 @@ class NotificationModel {
       'type': type,
       'read': read,
       'createdAt': FieldValue.serverTimestamp(),
+      if (orderId != null) 'orderId': orderId,
     };
   }
 }

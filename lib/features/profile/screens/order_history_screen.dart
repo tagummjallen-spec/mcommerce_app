@@ -12,19 +12,36 @@ class OrderHistoryScreen extends ConsumerWidget {
   const OrderHistoryScreen({super.key});
 
   Color _statusColor(String status) {
-    switch (status) {
-      case 'Processing':
-      case 'Approved':
+    switch (status.trim().toLowerCase()) {
+      case 'processing':
+      case 'approved':
         return AppColors.info;
-      case 'Shipped':
+      case 'shipped':
         return AppColors.primaryAccent;
-      case 'Completed':
-      case 'Delivered':
+      case 'completed':
+      case 'delivered':
         return AppColors.success;
-      case 'Cancelled':
+      case 'cancelled':
         return AppColors.error;
       default:
         return AppColors.warning; // Pending
+    }
+  }
+
+  IconData _statusIcon(String status) {
+    switch (status.trim().toLowerCase()) {
+      case 'processing':
+      case 'approved':
+        return Icons.autorenew_rounded;
+      case 'shipped':
+        return Icons.local_shipping_outlined;
+      case 'completed':
+      case 'delivered':
+        return Icons.check_circle_outline;
+      case 'cancelled':
+        return Icons.cancel_outlined;
+      default:
+        return Icons.schedule_rounded;
     }
   }
 
@@ -206,22 +223,33 @@ class OrderHistoryScreen extends ConsumerWidget {
                                 vertical: 4,
                               ),
                               decoration: BoxDecoration(
-                                color: _statusColor(order.status)
+                                color: _statusColor(order.orderStatus)
                                     .withValues(alpha: 0.15),
                                 borderRadius: BorderRadius.circular(20),
                                 border: Border.all(
-                                  color: _statusColor(order.status)
+                                  color: _statusColor(order.orderStatus)
                                       .withValues(alpha: 0.6),
                                 ),
                               ),
-                              child: Text(
-                                order.status.toUpperCase(),
-                                style: TextStyle(
-                                  color: _statusColor(order.status),
-                                  fontSize: 10.5,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 0.8,
-                                ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    _statusIcon(order.orderStatus),
+                                    color: _statusColor(order.orderStatus),
+                                    size: 12,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    order.orderStatus.toUpperCase(),
+                                    style: TextStyle(
+                                      color: _statusColor(order.orderStatus),
+                                      fontSize: 10.5,
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 0.8,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],

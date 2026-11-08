@@ -16,8 +16,8 @@ final customerOrdersProvider =
   yield* ref.watch(orderServiceProvider).watchCustomerOrders(user.uid);
 });
 
-/// Single order lookup; null when the order does not exist.
+/// Live single-order stream; null when the order does not exist.
 final orderProvider =
-    FutureProvider.autoDispose.family<OrderModel?, String>((ref, orderId) {
-  return ref.watch(orderServiceProvider).fetchOrder(orderId);
+    StreamProvider.autoDispose.family<OrderModel?, String>((ref, orderId) {
+  return ref.watch(orderServiceProvider).watchOrder(orderId);
 });

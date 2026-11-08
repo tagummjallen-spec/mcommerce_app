@@ -70,7 +70,12 @@ class OrderModel {
   final double subtotal;
   final double shippingFee;
   final double total;
-  final String status; // Pending, Processing, Shipped, Completed, Cancelled
+
+  /// Fulfillment status: Pending, Processing, Shipped, Completed or Cancelled.
+  ///
+  /// Newer order documents store this as `orderStatus`. Legacy documents only
+  /// have `status`, which is still read as a fallback and mirrored on write.
+  final String orderStatus;
   final String paymentMethod; // 'COD', 'GCash'
   final String paymentStatus; // 'Unpaid', 'Paid'
   final DateTime createdAt;
@@ -83,14 +88,32 @@ class OrderModel {
     required this.subtotal,
     required this.shippingFee,
     required this.total,
-    this.status = 'Pending',
+    String? orderStatus,
+    String? status,
     required this.paymentMethod,
     String? paymentStatus,
     DateTime? createdAt,
-  }) : paymentStatus = (paymentStatus == null || paymentStatus.isEmpty)
+  }) : orderStatus = _normalizeStatus(orderStatus ?? status),
+       paymentStatus = (paymentStatus == null || paymentStatus.isEmpty)
            ? (paymentMethod == 'COD' ? 'Unpaid' : 'Paid')
            : paymentStatus,
        createdAt = createdAt ?? DateTime.now();
+
+  /// Backwards-compatible alias for [orderStatus].
+  String get status => orderStatus;
+
+  static String _normalizeStatus(String? value) {
+    final normalized = value?.trim() ?? '';
+    return normalized.isEmpty ? 'Pending' : normalized;
+  }
+
+  static String _statusFromMap(Map<String, dynamic> map) {
+    for (final key in const ['orderStatus', 'status']) {
+      final value = map[key]?.toString().trim() ?? '';
+      if (value.isNotEmpty) return value;
+    }
+    return 'Pending';
+  }
 
   factory OrderModel.fromMap(Map<String, dynamic> map, String id) {
     final rawItems = map['items'];
@@ -129,7 +152,6 @@ class OrderModel {
         : <String, dynamic>{};
 
     final payment = map['paymentMethod']?.toString().trim();
-    final status = map['status']?.toString().trim();
     final normalizedPayment = (payment == null || payment.isEmpty)
         ? 'COD'
         : payment;
@@ -143,7 +165,7 @@ class OrderModel {
       subtotal: (map['subtotal'] as num?)?.toDouble() ?? 0.0,
       shippingFee: (map['shippingFee'] as num?)?.toDouble() ?? 0.0,
       total: (map['total'] as num?)?.toDouble() ?? 0.0,
-      status: (status == null || status.isEmpty) ? 'Pending' : status,
+      orderStatus: _statusFromMap(map),
       paymentMethod: normalizedPayment,
       paymentStatus: paymentStatus,
       createdAt: createdAt,
@@ -158,14 +180,18 @@ class OrderModel {
       'subtotal': subtotal,
       'shippingFee': shippingFee,
       'total': total,
-      'status': status,
+      // `orderStatus` is authoritative; `status` is kept in sync for legacy
+      // admin dashboards and reports that still read the old field.
+      'orderStatus': orderStatus,
+      'status': orderStatus,
       'paymentMethod': paymentMethod,
       'paymentStatus': paymentStatus,
       'createdAt': Timestamp.fromDate(createdAt),
     };
   }
 
-  bool get isEligibleForCancellation => status.toLowerCase() == 'pending';
+  bool get isEligibleForCancellation =>
+      orderStatus.toLowerCase() == 'pending';
 
   /// Total number of units across all item snapshots.
   int get itemCount => items.fold<int>(0, (acc, item) => acc + item.quantity);

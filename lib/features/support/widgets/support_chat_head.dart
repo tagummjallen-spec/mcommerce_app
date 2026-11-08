@@ -3,9 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_colors.dart';
-import '../../../providers/auth_provider.dart';
 import '../../../providers/support_chat_provider.dart';
-import '../../profile/widgets/profile_avatar.dart';
 
 /// Persistent, draggable customer-support chathead that floats above the main
 /// tab UI. Tapping it opens the live support conversation.
@@ -25,7 +23,6 @@ class _SupportChatHeadState extends ConsumerState<SupportChatHead> {
 
   @override
   Widget build(BuildContext context) {
-    final profile = ref.watch(currentUserProfileProvider).valueOrNull;
     final unread = ref.watch(supportUnreadByCustomerProvider);
     final screen = MediaQuery.sizeOf(context);
 
@@ -78,24 +75,40 @@ class _SupportChatHeadState extends ConsumerState<SupportChatHead> {
                       ],
                     ),
                     padding: const EdgeInsets.all(3),
-                    child: profile != null
-                        ? ProfileAvatar(
-                            imageUrl: profile.profileImageUrl,
-                            name: profile.displayName,
-                            radius: (_size - 10) / 2,
-                            backgroundColor: AppColors.softGreen,
-                          )
-                        : DecoratedBox(
-                            decoration: BoxDecoration(
-                              color: AppColors.primaryAccent,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(
-                              Icons.headset_mic_rounded,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryAccent,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Center(
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Icon(
+                              Icons.chat_bubble_rounded,
                               color: AppColors.onAccent,
-                              size: 26,
+                              size: 31,
                             ),
-                          ),
+                            Positioned(
+                              right: 8,
+                              bottom: 10,
+                              child: Container(
+                                padding: const EdgeInsets.all(1.5),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primaryAccent,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  Icons.headset_mic_rounded,
+                                  color: AppColors.onAccent,
+                                  size: 13,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                   Positioned(
                     right: 1,

@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'core/constants/app_colors.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
+import 'features/notifications/widgets/order_status_banner_host.dart';
 import 'firebase_options.dart';
 import 'providers/theme_provider.dart';
 
@@ -50,6 +51,11 @@ class AscendedAthleticsApp extends ConsumerWidget {
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
       routerConfig: router,
+      builder: (context, child) {
+        return OrderStatusBannerHost(
+          child: child ?? const SizedBox.shrink(),
+        );
+      },
     );
   }
 }

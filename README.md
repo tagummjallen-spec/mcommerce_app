@@ -81,11 +81,19 @@ products/{productId}/variants[] (embedded list)
 carts/{uid}/items/{itemId}  authenticated cart persistence (guest = local)
 orders/{orderId}            customerId, items[] (snapshots), shippingAddress,
                             subtotal, shippingFee, total, paymentMethod,
-                            status, createdAt, updatedAt
+                            orderStatus, createdAt, updatedAt
+notifications/{id}          userId, title, body, type, read, orderId, createdAt
 ```
 
-Order lifecycle: `Pending → Approved → Completed` and `Pending → Cancelled`
-(admin dashboard handles transitions; customer may cancel **Pending** only).
+`orderStatus` is one of `Pending`, `Processing`, `Shipped`, `Completed`, or
+`Cancelled`. The legacy `status` field is mirrored on every write for older
+reports/dashboards, but new code should read `orderStatus`.
+
+Order lifecycle: `Pending → Processing → Shipped → Completed` and
+`Pending → Cancelled` (admin dashboard handles transitions; customer may cancel
+**Pending** only). The customer app keeps a live Firestore listener on its
+orders, shows an in-app alert when the admin changes a status, and stores an
+unread `notifications/{id}` record that can be opened from Notifications.
 Payment is **simulated** (informational field only — no gateway).
 
 ---

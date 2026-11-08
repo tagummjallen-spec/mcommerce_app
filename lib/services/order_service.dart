@@ -152,6 +152,8 @@ class OrderService {
           'total': total,
           'paymentMethod': normalizedPayment,
           'paymentStatus': normalizedPayment == 'COD' ? 'Unpaid' : 'Paid',
+          'orderStatus': 'Pending',
+          // Mirror the legacy field for older admin/report code.
           'status': 'Pending',
           // Explicitly false: admin fulfillment deducts stock on completion.
           // Legacy orders without this field already reserved stock at
@@ -211,7 +213,9 @@ class OrderService {
         throw Exception('Order not found.');
       }
       final data = orderSnap.data() as Map<String, dynamic>;
-      final status = data['status'] ?? '';
+      final status = (data['orderStatus'] ?? data['status'] ?? '')
+          .toString()
+          .trim();
       if (status != 'Pending') {
         throw Exception('Only pending orders can be cancelled.');
       }
@@ -299,6 +303,7 @@ class OrderService {
       // Guarded status flip: if another request already cancelled this order,
       // this transaction would have failed the status check above.
       transaction.update(orderRef, {
+        'orderStatus': 'Cancelled',
         'status': 'Cancelled',
         'updatedAt': FieldValue.serverTimestamp(),
       });
@@ -322,7 +327,10 @@ class OrderService {
       final data = doc.data();
       if (data is! Map) continue;
 
-      final status = (data['status']?.toString() ?? '').trim().toLowerCase();
+      final status = (data['orderStatus'] ?? data['status'] ?? '')
+          .toString()
+          .trim()
+          .toLowerCase();
       if (status != 'completed' && status != 'delivered') continue;
 
       final items = data['items'];
@@ -349,6 +357,16 @@ class OrderService {
       }).toList();
       orders.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       return orders;
+    });
+  }
+
+  /// Live document stream so order details reflect admin status changes
+  /// without requiring a manual refresh.
+  Stream<OrderModel?> watchOrder(String orderId) {
+    return _orders.doc(orderId).snapshots().map((doc) {
+      final data = doc.data();
+      if (!doc.exists || data is! Map) return null;
+      return OrderModel.fromMap(Map<String, dynamic>.from(data), orderId);
     });
   }
 

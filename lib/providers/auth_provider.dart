@@ -27,3 +27,8 @@ final isGuestProvider = Provider<bool>((ref) {
   final user = ref.watch(authStateProvider).valueOrNull;
   return user == null;
 });
+
+// Convenience: the signed-in customer's uid (null for guests).
+final currentCustomerIdProvider = Provider<String?>((ref) {
+  return ref.watch(authStateProvider).valueOrNull?.uid;
+});

@@ -23,19 +23,36 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
   bool _isCancelling = false;
 
   Color _statusColor(String status) {
-    switch (status) {
-      case 'Processing':
-      case 'Approved':
+    switch (status.trim().toLowerCase()) {
+      case 'processing':
+      case 'approved':
         return AppColors.info;
-      case 'Shipped':
+      case 'shipped':
         return AppColors.primaryAccent;
-      case 'Completed':
-      case 'Delivered':
+      case 'completed':
+      case 'delivered':
         return AppColors.success;
-      case 'Cancelled':
+      case 'cancelled':
         return AppColors.error;
       default:
         return AppColors.warning;
+    }
+  }
+
+  IconData _statusIcon(String status) {
+    switch (status.trim().toLowerCase()) {
+      case 'processing':
+      case 'approved':
+        return Icons.autorenew_rounded;
+      case 'shipped':
+        return Icons.local_shipping_outlined;
+      case 'completed':
+      case 'delivered':
+        return Icons.check_circle_outline;
+      case 'cancelled':
+        return Icons.cancel_outlined;
+      default:
+        return Icons.schedule_rounded;
     }
   }
 
@@ -145,7 +162,7 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
             );
           }
 
-          final statusLower = order.status.trim().toLowerCase();
+          final statusLower = order.orderStatus.trim().toLowerCase();
           final isCompleted =
               statusLower == 'completed' || statusLower == 'delivered';
 
@@ -189,22 +206,33 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
                               vertical: 5,
                             ),
                             decoration: BoxDecoration(
-                              color: _statusColor(order.status)
+                              color: _statusColor(order.orderStatus)
                                   .withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(20),
                               border: Border.all(
-                                color: _statusColor(order.status)
+                                color: _statusColor(order.orderStatus)
                                     .withValues(alpha: 0.6),
                               ),
                             ),
-                            child: Text(
-                              order.status.toUpperCase(),
-                              style: TextStyle(
-                                color: _statusColor(order.status),
-                                fontWeight: FontWeight.bold,
-                                fontSize: 11,
-                                letterSpacing: 0.8,
-                              ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  _statusIcon(order.orderStatus),
+                                  color: _statusColor(order.orderStatus),
+                                  size: 13,
+                                ),
+                                const SizedBox(width: 5),
+                                Text(
+                                  order.orderStatus.toUpperCase(),
+                                  style: TextStyle(
+                                    color: _statusColor(order.orderStatus),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 11,
+                                    letterSpacing: 0.8,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
@@ -542,7 +570,7 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
                 else
                   Center(
                     child: Text(
-                      'This order is ${order.status.toLowerCase()} and can no longer be cancelled.',
+                      'This order is ${order.orderStatus.toLowerCase()} and can no longer be cancelled.',
                       style: TextStyle(
                         color: AppColors.tertiaryText,
                         fontSize: 12.5,

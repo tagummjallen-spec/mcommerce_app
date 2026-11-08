@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/widgets/brand_app_bar.dart';
 import '../../../providers/notification_provider.dart';
@@ -100,6 +101,10 @@ class NotificationsScreen extends ConsumerWidget {
                     await ref
                         .read(notificationServiceProvider)
                         .markAsRead(n.id);
+                  }
+                  final orderId = n.orderId;
+                  if (orderId != null && orderId.isNotEmpty && context.mounted) {
+                    context.push('/profile/orders/order-details/$orderId');
                   }
                 },
               );
