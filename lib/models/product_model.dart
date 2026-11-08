@@ -40,9 +40,14 @@ class ProductModel {
   final String name;
   final String description;
   final double price;
-  final String categoryId; // product type
+
+  /// Product category (Tops, Gloves, Uniforms, ...).
+  final String category;
+
+  /// Gallery images (base64 data URLs, asset paths, or http URLs).
+  final List<String> imageUrls;
+
   final List<String> disciplines;
-  final List<String> images;
   final bool isActive;
   final List<ProductVariant> variants;
   final DateTime createdAt;
@@ -52,13 +57,17 @@ class ProductModel {
     required this.name,
     required this.description,
     required this.price,
-    required this.categoryId,
+    required this.category,
     required this.disciplines,
-    required this.images,
+    required this.imageUrls,
     this.isActive = true,
     required this.variants,
     DateTime? createdAt,
   }) : createdAt = createdAt ?? DateTime.now();
+
+  /// Backwards-compatible aliases used by older screens/services.
+  List<String> get images => imageUrls;
+  String get categoryId => category;
 
   factory ProductModel.fromMap(Map<String, dynamic> map, String id) {
     try {
@@ -113,9 +122,10 @@ class ProductModel {
         parsedIsActive = map['isActive'] as bool;
       }
 
+      final rawImages = map['imageUrls'] ?? map['images'];
       List<String> parsedImages = [];
-      if (map['images'] is List) {
-        parsedImages = (map['images'] as List)
+      if (rawImages is List) {
+        parsedImages = rawImages
             .where((e) => e != null)
             .map((e) => e.toString())
             .toList();
@@ -142,11 +152,14 @@ class ProductModel {
         name: map['name']?.toString() ?? '',
         description: map['description']?.toString() ?? '',
         price: parsedPrice,
-        categoryId:
-            (map['categoryId'] ?? map['productTypeId'])?.toString() ??
+        category:
+            (map['category'] ??
+                    map['categoryId'] ??
+                    map['productTypeId'])
+                ?.toString() ??
             'General',
         disciplines: parsedDisciplines,
-        images: parsedImages,
+        imageUrls: parsedImages,
         isActive: parsedIsActive,
         variants: variantList,
         createdAt: parsedCreatedAt,
@@ -165,9 +178,11 @@ class ProductModel {
       'name': name,
       'description': description,
       'price': price,
-      'categoryId': categoryId,
+      'category': category,
+      'categoryId': category,
       'disciplines': disciplines,
-      'images': images,
+      'imageUrls': imageUrls,
+      'images': imageUrls,
       'isActive': isActive,
       'variants': variants.map((v) => v.toMap()).toList(),
       'createdAt': Timestamp.fromDate(createdAt),

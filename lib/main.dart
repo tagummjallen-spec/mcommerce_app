@@ -34,7 +34,7 @@ class AscendedAthleticsApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'Ascended Athletics',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.darkTheme,
+      theme: AppTheme.lightTheme,
       routerConfig: router,
     );
   }

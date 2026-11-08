@@ -58,6 +58,7 @@ class OrderModel {
   final double total;
   final String status; // Pending, Processing, Shipped, Completed, Cancelled
   final String paymentMethod; // 'COD', 'GCash'
+  final String paymentStatus; // 'Unpaid', 'Paid'
   final DateTime createdAt;
 
   OrderModel({
@@ -70,8 +71,12 @@ class OrderModel {
     required this.total,
     this.status = 'Pending',
     required this.paymentMethod,
+    String? paymentStatus,
     DateTime? createdAt,
-  }) : createdAt = createdAt ?? DateTime.now();
+  }) : paymentStatus = (paymentStatus == null || paymentStatus.isEmpty)
+           ? (paymentMethod == 'COD' ? 'Unpaid' : 'Paid')
+           : paymentStatus,
+       createdAt = createdAt ?? DateTime.now();
 
   factory OrderModel.fromMap(Map<String, dynamic> map, String id) {
     final rawItems = map['items'];
@@ -111,6 +116,10 @@ class OrderModel {
 
     final payment = map['paymentMethod']?.toString().trim();
     final status = map['status']?.toString().trim();
+    final normalizedPayment = (payment == null || payment.isEmpty)
+        ? 'COD'
+        : payment;
+    final paymentStatus = map['paymentStatus']?.toString().trim();
 
     return OrderModel(
       id: id,
@@ -121,7 +130,8 @@ class OrderModel {
       shippingFee: (map['shippingFee'] as num?)?.toDouble() ?? 0.0,
       total: (map['total'] as num?)?.toDouble() ?? 0.0,
       status: (status == null || status.isEmpty) ? 'Pending' : status,
-      paymentMethod: (payment == null || payment.isEmpty) ? 'COD' : payment,
+      paymentMethod: normalizedPayment,
+      paymentStatus: paymentStatus,
       createdAt: createdAt,
     );
   }
@@ -136,6 +146,7 @@ class OrderModel {
       'total': total,
       'status': status,
       'paymentMethod': paymentMethod,
+      'paymentStatus': paymentStatus,
       'createdAt': Timestamp.fromDate(createdAt),
     };
   }

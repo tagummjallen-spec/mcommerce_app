@@ -13,12 +13,13 @@ final authStateProvider = StreamProvider<User?>((ref) {
 // Local guest flag: true when the user explicitly entered as guest
 final guestModeProvider = StateProvider<bool>((ref) => false);
 
-// Current user profile loaded from Firestore
-final currentUserProfileProvider = FutureProvider<UserModel?>((ref) async {
+// Current user profile loaded from Firestore (live stream so profile edits are
+// reflected instantly across the app, e.g. the floating chathead avatar).
+final currentUserProfileProvider = StreamProvider<UserModel?>((ref) {
   final auth = ref.watch(authStateProvider);
   final user = auth.valueOrNull;
-  if (user == null) return null;
-  return ref.watch(authServiceProvider).getUserProfile(user.uid);
+  if (user == null) return Stream.value(null);
+  return ref.watch(authServiceProvider).watchUserProfile(user.uid);
 });
 
 // Convenience: whether the app is in guest (not logged in) mode

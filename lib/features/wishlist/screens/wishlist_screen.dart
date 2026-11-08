@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/widgets/brand_app_bar.dart';
 import '../../../providers/auth_provider.dart';
 import '../../../providers/wishlist_provider.dart';
 import '../../products/widgets/product_card.dart';
@@ -16,7 +17,7 @@ class WishlistScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.primaryBackground,
-      appBar: AppBar(title: const Text('WISHLIST')),
+      appBar: const BrandAppBar(),
       body: isGuest
           ? _LoginGate(
               message:

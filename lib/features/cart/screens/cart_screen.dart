@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
+import '../../../core/widgets/brand_app_bar.dart';
 import '../../../providers/cart_provider.dart';
 
 class CartScreen extends ConsumerWidget {
@@ -28,8 +29,10 @@ class CartScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.primaryBackground,
-      appBar: AppBar(
-        title: const Text('MY CART'),
+      appBar: BrandAppBar(
+        showBack: true,
+        showBag: false,
+        title: 'MY CART',
         actions: [
           if (cart.items.isNotEmpty)
             TextButton(

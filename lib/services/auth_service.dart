@@ -104,6 +104,49 @@ class AuthService {
     }
   }
 
+  /// Live profile stream so UI (chathead, checkout, etc.) reacts instantly to
+  /// profile edits without manual invalidation.
+  Stream<UserModel?> watchUserProfile(String uid) {
+    return _firestore.collection('users').doc(uid).snapshots().map((doc) {
+      if (!doc.exists || doc.data() == null) return null;
+      return UserModel.fromMap(doc.data()!, uid);
+    });
+  }
+
+  /// Persists editable profile fields and keeps the Firebase Auth display name
+  /// in sync. Uses `merge` so fields we do not manage are preserved.
+  Future<void> updateUserProfile({
+    required String uid,
+    required String displayName,
+    required String phoneNumber,
+    required String streetAddress,
+    required String barangay,
+    String? profileImageUrl,
+  }) async {
+    final data = <String, dynamic>{
+      'displayName': displayName.trim(),
+      'fullName': displayName.trim(), // legacy key
+      'phoneNumber': phoneNumber.trim(),
+      'phone': phoneNumber.trim(), // legacy key
+      'streetAddress': streetAddress.trim(),
+      'barangay': barangay.trim(),
+      'updatedAt': FieldValue.serverTimestamp(),
+    };
+    if (profileImageUrl != null) {
+      data['profileImageUrl'] = profileImageUrl;
+    }
+
+    await _firestore
+        .collection('users')
+        .doc(uid)
+        .set(data, SetOptions(merge: true));
+
+    final current = _auth.currentUser;
+    if (current != null && current.uid == uid) {
+      await current.updateDisplayName(displayName.trim());
+    }
+  }
+
   // Password reset email
   Future<void> resetPassword(String email) async {
     try {

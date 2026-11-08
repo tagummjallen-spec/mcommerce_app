@@ -12,7 +12,7 @@ import '../../features/products/screens/product_details_screen.dart';
 import '../../features/wishlist/screens/wishlist_screen.dart';
 import '../../features/cart/screens/cart_screen.dart';
 import '../../features/checkout/screens/checkout_screen.dart';
-import '../../features/checkout/screens/order_confirmation_screen.dart';
+import '../../features/checkout/screens/checkout_success_screen.dart';
 import '../../features/profile/screens/profile_screen.dart';
 import '../../features/profile/screens/order_history_screen.dart';
 import '../../features/profile/screens/order_details_screen.dart';
@@ -80,14 +80,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/cart',
-                builder: (context, state) => const CartScreen(),
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
                 path: '/profile',
                 builder: (context, state) => const ProfileScreen(),
                 routes: [
@@ -119,6 +111,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       // Focused flow: hides bottom navigation
       GoRoute(
+        path: '/cart',
+        parentNavigatorKey: rootNavigatorKey,
+        builder: (context, state) => const CartScreen(),
+      ),
+      GoRoute(
         path: '/checkout',
         parentNavigatorKey: rootNavigatorKey,
         builder: (context, state) => const CheckoutScreen(),
@@ -126,7 +123,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/order-confirmation/:orderId',
         parentNavigatorKey: rootNavigatorKey,
-        builder: (context, state) => OrderConfirmationScreen(
+        builder: (context, state) => CheckoutSuccessScreen(
           orderId: state.pathParameters['orderId']!,
         ),
       ),

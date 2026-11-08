@@ -50,7 +50,7 @@ class SectionHeader extends StatelessWidget {
               child: Text(
                 actionLabel!,
                 style: const TextStyle(
-                  color: AppColors.lightAccent,
+                  color: AppColors.primaryAccent,
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                 ),

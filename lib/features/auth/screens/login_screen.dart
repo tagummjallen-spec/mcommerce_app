@@ -184,7 +184,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             width: 22,
                             height: 22,
                             child: CircularProgressIndicator(
-                              color: AppColors.primaryText,
+                              color: AppColors.onAccent,
                               strokeWidth: 2.5,
                             ),
                           )

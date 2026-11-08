@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
-import '../../../providers/cart_provider.dart';
+import '../../../core/widgets/brand_app_bar.dart';
 import '../../../providers/product_provider.dart';
 import '../widgets/product_card.dart';
 
@@ -53,7 +52,6 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
   Widget build(BuildContext context) {
     final filter = ref.watch(shopFilterProvider);
     final filtered = ref.watch(filteredProductsProvider);
-    final cartCount = ref.watch(cartItemCountProvider);
 
     final activeFilterCount =
         (filter.discipline != 'All' ? 1 : 0) +
@@ -61,22 +59,7 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.primaryBackground,
-      appBar: AppBar(
-        title: const Text('SHOP'),
-        actions: [
-          IconButton(
-            tooltip: 'Cart',
-            icon: Badge(
-              isLabelVisible: cartCount > 0,
-              label: Text('$cartCount'),
-              backgroundColor: AppColors.primaryAccent,
-              child: const Icon(Icons.shopping_bag_outlined),
-            ),
-            onPressed: () => context.go('/cart'),
-          ),
-          const SizedBox(width: 6),
-        ],
-      ),
+      appBar: const BrandAppBar(),
       body: Column(
         children: [
           // ===== Search bar =====
@@ -456,7 +439,7 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
                             backgroundColor: AppColors.cardSurface,
                             labelStyle: TextStyle(
                               color: selected
-                                  ? AppColors.primaryText
+                                  ? AppColors.onAccent
                                   : AppColors.secondaryText,
                               fontWeight: selected
                                   ? FontWeight.bold
@@ -494,7 +477,7 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
                             backgroundColor: AppColors.cardSurface,
                             labelStyle: TextStyle(
                               color: selected
-                                  ? AppColors.primaryText
+                                  ? AppColors.onAccent
                                   : AppColors.secondaryText,
                               fontWeight: selected
                                   ? FontWeight.bold

@@ -151,6 +151,7 @@ class OrderService {
           'shippingFee': safeShippingFee,
           'total': total,
           'paymentMethod': normalizedPayment,
+          'paymentStatus': normalizedPayment == 'COD' ? 'Unpaid' : 'Paid',
           'status': 'Pending',
           // Explicitly false: admin fulfillment deducts stock on completion.
           // Legacy orders without this field already reserved stock at

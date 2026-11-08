@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/widgets/brand_app_bar.dart';
 import '../../../models/support_message_model.dart';
 import '../../../providers/auth_provider.dart';
 import '../../../providers/support_chat_provider.dart';
@@ -92,7 +93,11 @@ class _SupportChatScreenState extends ConsumerState<SupportChatScreen> {
     if (user == null) {
       return Scaffold(
         backgroundColor: AppColors.primaryBackground,
-        appBar: AppBar(title: const Text('CUSTOMER SUPPORT')),
+        appBar: const BrandAppBar(
+          showBack: true,
+          showBag: false,
+          title: 'CUSTOMER SUPPORT',
+        ),
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(24),
@@ -135,12 +140,10 @@ class _SupportChatScreenState extends ConsumerState<SupportChatScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.primaryBackground,
-      appBar: AppBar(
-        title: const Text('CUSTOMER SUPPORT'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.canPop() ? context.pop() : context.go('/home'),
-        ),
+      appBar: const BrandAppBar(
+        showBack: true,
+        showBag: false,
+        title: 'CUSTOMER SUPPORT',
       ),
       body: Column(
         children: [

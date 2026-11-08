@@ -1,70 +1,56 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../core/constants/app_colors.dart';
-import '../../../providers/cart_provider.dart';
 
-/// Wraps the five primary tabs: Home, Shop, Wishlist, Cart, Profile.
-class MainScaffold extends ConsumerWidget {
+import '../../../core/constants/app_colors.dart';
+import '../support/widgets/support_chat_head.dart';
+
+/// Wraps the four primary tabs: Home, Shop, Wishlist, Profile.
+class MainScaffold extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
 
   const MainScaffold({super.key, required this.navigationShell});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final cartCount = ref.watch(cartItemCountProvider);
-
+  Widget build(BuildContext context) {
     return Scaffold(
-      body: navigationShell,
+      backgroundColor: AppColors.primaryBackground,
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          navigationShell,
+          const SupportChatHead(),
+        ],
+      ),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
           color: AppColors.secondarySurface,
           border: Border(top: BorderSide(color: AppColors.border, width: 1)),
         ),
         child: NavigationBar(
-          backgroundColor: AppColors.secondarySurface,
-          indicatorColor: AppColors.primaryAccent.withValues(alpha: 0.18),
           selectedIndex: navigationShell.currentIndex,
           onDestinationSelected: (index) => navigationShell.goBranch(
             index,
             initialLocation: index == navigationShell.currentIndex,
           ),
-          labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-          height: 68,
-          destinations: [
-            const NavigationDestination(
+          destinations: const [
+            NavigationDestination(
               icon: Icon(Icons.home_outlined),
-              selectedIcon: Icon(Icons.home, color: AppColors.primaryAccent),
+              selectedIcon: Icon(Icons.home_rounded),
               label: 'Home',
             ),
-            const NavigationDestination(
+            NavigationDestination(
               icon: Icon(Icons.storefront_outlined),
-              selectedIcon: Icon(Icons.storefront, color: AppColors.primaryAccent),
+              selectedIcon: Icon(Icons.storefront_rounded),
               label: 'Shop',
             ),
-            const NavigationDestination(
-              icon: Icon(Icons.favorite_outline),
-              selectedIcon: Icon(Icons.favorite, color: AppColors.primaryAccent),
+            NavigationDestination(
+              icon: Icon(Icons.favorite_outline_rounded),
+              selectedIcon: Icon(Icons.favorite_rounded),
               label: 'Wishlist',
             ),
             NavigationDestination(
-              icon: Badge(
-                isLabelVisible: cartCount > 0,
-                label: Text('$cartCount'),
-                backgroundColor: AppColors.primaryAccent,
-                child: const Icon(Icons.shopping_bag_outlined),
-              ),
-              selectedIcon: Badge(
-                isLabelVisible: cartCount > 0,
-                label: Text('$cartCount'),
-                backgroundColor: AppColors.primaryAccent,
-                child: const Icon(Icons.shopping_bag, color: AppColors.primaryAccent),
-              ),
-              label: 'Cart',
-            ),
-            const NavigationDestination(
-              icon: Icon(Icons.person_outline),
-              selectedIcon: Icon(Icons.person, color: AppColors.primaryAccent),
+              icon: Icon(Icons.person_outline_rounded),
+              selectedIcon: Icon(Icons.person_rounded),
               label: 'Profile',
             ),
           ],

@@ -1,28 +1,34 @@
 import 'package:flutter/material.dart';
 
+/// Minimalist cream / dark-green palette used across the storefront.
 class AppColors {
-  // Primary dark palette
-  static const Color primaryBackground = Color(0xFF0B0B0F); // Near-black
-  static const Color secondarySurface = Color(0xFF17171F);  // Charcoal panel/card
-  static const Color cardSurface = Color(0xFF1E1E28);       // Slightly lighter card surface
+  // Surfaces
+  static const Color primaryBackground = Color(0xFFFAF7F0); // Cream / off-white
+  static const Color secondarySurface = Color(0xFFFFFFFF); // Card white
+  static const Color cardSurface = Color(0xFFF2EDE2); // Soft sand panel
 
-  // Accent colors
-  static const Color primaryAccent = Color(0xFF8B5CF6);    // Electric purple
-  static const Color deepAccent = Color(0xFF6D28D9);       // Deep purple highlight
-  static const Color lightAccent = Color(0xFFA78BFA);      // Soft purple text accent
+  // Interactive / brand greens
+  static const Color primaryAccent = Color(0xFF1F4D3A); // Deep forest green
+  static const Color deepAccent = Color(0xFF163A2B); // Darkest green
+  static const Color lightAccent = Color(0xFF3E7A5E); // Mid green accent
 
-  // Neutral text colors
-  static const Color primaryText = Color(0xFFFFFFFF);      // White
-  static const Color secondaryText = Color(0xFFA1A1AA);    // Muted gray
-  static const Color tertiaryText = Color(0xFF71717A);     // Darker gray
+  // Text
+  static const Color primaryText = Color(0xFF1C2A22); // Near-black green
+  static const Color secondaryText = Color(0xFF66756B); // Muted green-grey
+  static const Color tertiaryText = Color(0xFF98A49B); // Soft grey-green
+  static const Color onAccent = Color(0xFFFFFFFF); // Text on dark green
 
-  // Borders & Dividers
-  static const Color border = Color(0xFF27272A);          // Subtle divider
-  static const Color borderLight = Color(0xFF3F3F46);     // Interactive border
+  // Borders & dividers
+  static const Color border = Color(0xFFE7E1D5); // Warm hairline
+  static const Color borderLight = Color(0xFFD4CBBB); // Stronger warm hairline
 
-  // Feedback & Statuses
-  static const Color success = Color(0xFF22C55E);         // Green
-  static const Color warning = Color(0xFFF59E0B);         // Amber
-  static const Color error = Color(0xFFEF4444);           // Red
-  static const Color info = Color(0xFF3B82F6);            // Blue
+  // Feedback & status
+  static const Color success = Color(0xFF2E7D5B);
+  static const Color warning = Color(0xFFC8842A);
+  static const Color error = Color(0xFFBE3A2B);
+  static const Color info = Color(0xFF3A6EA5);
+
+  // Extras used by the new Shopee-like surfaces.
+  static const Color softGreen = Color(0xFFEAF1EC); // Tinted green panel
+  static const Color softSand = Color(0xFFF6F0E4); // Tinted sand panel
 }

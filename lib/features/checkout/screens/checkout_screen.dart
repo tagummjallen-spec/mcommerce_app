@@ -1,11 +1,13 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
+import '../../../core/widgets/brand_app_bar.dart';
 import '../../../models/order_model.dart';
+import '../../../models/user_model.dart';
 import '../../../providers/auth_provider.dart';
 import '../../../providers/cart_provider.dart';
 import '../../../providers/order_provider.dart';
@@ -30,6 +32,10 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   String _paymentMethod = 'COD'; // COD | GCash (simulated)
   bool _isPlacingOrder = false;
 
+  /// Tracks the values we injected so later live profile emissions never
+  /// overwrite text the customer has edited manually.
+  final Map<TextEditingController, String> _appliedProfileValues = {};
+
   @override
   void initState() {
     super.initState();
@@ -37,15 +43,35 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final profile = ref.read(currentUserProfileProvider).valueOrNull;
       final user = ref.read(authStateProvider).valueOrNull;
-      if (profile != null) {
-        _nameController.text = profile.fullName;
-        _emailController.text = profile.email;
-        _phoneController.text = profile.phone;
-      } else if (user != null) {
-        _nameController.text = user.displayName ?? '';
-        _emailController.text = user.email ?? '';
-      }
+      _applyProfile(profile, user);
     });
+  }
+
+  void _applyProfile(UserModel? profile, User? user) {
+    if (profile == null) {
+      if (user != null) {
+        _fillIfUntouched(_nameController, user.displayName ?? '');
+        _fillIfUntouched(_emailController, user.email ?? '');
+      }
+      return;
+    }
+
+    _fillIfUntouched(_nameController, profile.displayName);
+    _fillIfUntouched(_emailController, profile.email);
+    _fillIfUntouched(_phoneController, profile.phoneNumber);
+    _fillIfUntouched(_streetController, profile.streetAddress);
+    _fillIfUntouched(_cityController, profile.barangay);
+  }
+
+  void _fillIfUntouched(TextEditingController controller, String value) {
+    if (value.trim().isEmpty) return;
+    final lastApplied = _appliedProfileValues[controller];
+    final untouched =
+        controller.text.trim().isEmpty ||
+        (lastApplied != null && controller.text == lastApplied);
+    if (!untouched) return;
+    controller.text = value;
+    _appliedProfileValues[controller] = value;
   }
 
   @override
@@ -200,19 +226,22 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     final cart = ref.watch(cartProvider);
     final user = ref.watch(authStateProvider).valueOrNull;
 
+    // Live profile updates (e.g. address saved from Edit profile) populate the
+    // shipping form immediately without requiring a screen rebuild from scratch.
+    ref.listen(currentUserProfileProvider, (previous, next) {
+      if (!next.hasValue) return;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        _applyProfile(next.value, ref.read(authStateProvider).valueOrNull);
+      });
+    });
+
     // If cart became empty and order finished, still allow viewing the form.
     final isGuest = user == null;
 
     return Scaffold(
       backgroundColor: AppColors.primaryBackground,
-      appBar: AppBar(
-        title: const Text('CHECKOUT'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () =>
-              context.canPop() ? context.pop() : context.go('/cart'),
-        ),
-      ),
+      appBar: const BrandAppBar(showBack: true),
       body: cart.items.isEmpty && !_isPlacingOrder
           ? Center(
               child: Column(
@@ -334,11 +363,11 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                         Expanded(
                           child: _buildField(
                             controller: _cityController,
-                            label: 'City / Municipality',
-                            hint: 'Binangonan',
+                            label: 'Barangay / City',
+                            hint: 'Brgy. San Isidro, Binangonan',
                             icon: Icons.location_city_outlined,
                             validator: (v) =>
-                                _validateField(v, 'City / Municipality'),
+                                _validateField(v, 'Barangay / City'),
                           ),
                         ),
                         const SizedBox(width: 12),

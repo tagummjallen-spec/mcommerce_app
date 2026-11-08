@@ -4,11 +4,10 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_constants.dart';
+import '../../../core/widgets/brand_app_bar.dart';
 import '../../../providers/auth_provider.dart';
-import '../../../providers/cart_provider.dart';
 import '../../../providers/notification_provider.dart';
 import '../../../providers/product_provider.dart';
-import '../../../providers/support_chat_provider.dart';
 import '../../products/widgets/product_card.dart';
 import '../widgets/promo_banner.dart';
 import '../widgets/section_header.dart';
@@ -19,13 +18,26 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final productsAsync = ref.watch(productsProvider);
-    final cartCount = ref.watch(cartItemCountProvider);
     final isGuest = ref.watch(isGuestProvider);
     final unreadNotifications = ref.watch(unreadNotificationCountProvider);
-    final supportUnread = ref.watch(supportUnreadByCustomerProvider);
 
     return Scaffold(
       backgroundColor: AppColors.primaryBackground,
+      appBar: BrandAppBar(
+        actions: [
+          IconButton(
+            tooltip: 'Notifications',
+            onPressed: () => context.go('/profile/notifications'),
+            icon: Badge(
+              isLabelVisible: unreadNotifications > 0,
+              label: Text('$unreadNotifications'),
+              backgroundColor: AppColors.error,
+              textColor: Colors.white,
+              child: const Icon(Icons.notifications_outlined, size: 23),
+            ),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: RefreshIndicator(
           color: AppColors.primaryAccent,
@@ -33,88 +45,36 @@ class HomeScreen extends ConsumerWidget {
           onRefresh: () async => ref.invalidate(productsProvider),
           child: CustomScrollView(
             slivers: [
-              // ===== Brand header =====
+              // ===== Greeting =====
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-                  child: Row(
+                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: AppColors.primaryAccent.withValues(
-                            alpha: 0.15,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Icon(
-                          Icons.bolt_rounded,
-                          color: AppColors.primaryAccent,
-                          size: 22,
+                      Text(
+                        isGuest ? 'Welcome, guest' : 'Welcome back',
+                        style: const TextStyle(
+                          color: AppColors.primaryText,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 22,
+                          letterSpacing: -0.4,
                         ),
                       ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              AppConstants.appName.toUpperCase(),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                color: AppColors.primaryText,
-                                fontWeight: FontWeight.w800,
-                                fontSize: 15,
-                                letterSpacing: 1.5,
-                              ),
-                            ),
-                            Text(
-                              isGuest ? 'Browsing as Guest' : 'Signed in',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                color: AppColors.tertiaryText,
-                                fontSize: 11,
-                              ),
-                            ),
-                          ],
+                      const SizedBox(height: 4),
+                      const Text(
+                        'Gear engineered for combat and everyday training.',
+                        style: TextStyle(
+                          color: AppColors.secondaryText,
+                          fontSize: 13,
                         ),
-                      ),
-                      const SizedBox(width: 8),
-                      Row(
-                        children: [
-                          _HeaderIconButton(
-                            icon: Icons.search,
-                            onTap: () => context.go('/shop'),
-                          ),
-                          const SizedBox(width: 8),
-                          _HeaderIconButton(
-                            icon: Icons.support_agent_outlined,
-                            badgeCount: supportUnread,
-                            onTap: () => context.push('/support'),
-                          ),
-                          const SizedBox(width: 8),
-                          _HeaderIconButton(
-                            icon: Icons.notifications_outlined,
-                            badgeCount: unreadNotifications,
-                            onTap: () => context.go('/profile/notifications'),
-                          ),
-                          const SizedBox(width: 8),
-                          _HeaderIconButton(
-                            icon: Icons.shopping_bag_outlined,
-                            badgeCount: cartCount,
-                            onTap: () => context.go('/cart'),
-                          ),
-                        ],
                       ),
                     ],
                   ),
                 ),
               ),
 
-              const SliverToBoxAdapter(child: SizedBox(height: 12)),
+              const SliverToBoxAdapter(child: SizedBox(height: 8)),
 
               // ===== Promotional banner =====
               const SliverToBoxAdapter(child: PromoBanner()),
@@ -244,18 +204,6 @@ class HomeScreen extends ConsumerWidget {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => context.push('/support'),
-        backgroundColor: AppColors.primaryAccent,
-        foregroundColor: Colors.white,
-        icon: Badge(
-          isLabelVisible: supportUnread > 0,
-          label: Text('$supportUnread'),
-          backgroundColor: AppColors.error,
-          child: const Icon(Icons.chat_bubble_outline),
-        ),
-        label: const Text('Support'),
-      ),
     );
   }
 }
@@ -348,38 +296,6 @@ class _ErrorState extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _HeaderIconButton extends StatelessWidget {
-  final IconData icon;
-  final VoidCallback onTap;
-  final int badgeCount;
-  const _HeaderIconButton({
-    required this.icon,
-    required this.onTap,
-    this.badgeCount = 0,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: AppColors.secondarySurface,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: AppColors.border),
-        ),
-        child: Badge(
-          isLabelVisible: badgeCount > 0,
-          label: Text('$badgeCount'),
-          backgroundColor: AppColors.primaryAccent,
-          child: Icon(icon, color: AppColors.primaryText, size: 20),
-        ),
       ),
     );
   }

@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_colors.dart';
+import '../../../core/widgets/brand_app_bar.dart';
 import '../../../providers/auth_provider.dart';
 import '../../../models/user_model.dart';
+import '../widgets/profile_avatar.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -17,7 +19,7 @@ class ProfileScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.primaryBackground,
-      appBar: AppBar(title: const Text('PROFILE')),
+      appBar: const BrandAppBar(),
       body: isGuest
           ? _buildGuest(context, ref)
           : _buildMember(context, ref, user.uid, profileAsync),
@@ -104,17 +106,8 @@ class ProfileScreen extends ConsumerWidget {
             ),
             error: (e, _) => const SizedBox.shrink(),
             data: (profile) {
-              final name = profile?.fullName ?? 'Customer';
+              final name = profile?.displayName ?? 'Customer';
               final email = profile?.email ?? '';
-              final initials = name.isNotEmpty
-                  ? name
-                        .trim()
-                        .split(' ')
-                        .map((w) => w[0])
-                        .take(2)
-                        .join()
-                        .toUpperCase()
-                  : 'AA';
               return Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(18),
@@ -125,27 +118,10 @@ class ProfileScreen extends ConsumerWidget {
                 ),
                 child: Row(
                   children: [
-                    Container(
-                      width: 60,
-                      height: 60,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [
-                            AppColors.primaryAccent,
-                            AppColors.deepAccent,
-                          ],
-                        ),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Text(
-                        initials,
-                        style: const TextStyle(
-                          color: AppColors.primaryText,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 20,
-                        ),
-                      ),
+                    ProfileAvatar(
+                      imageUrl: profile?.profileImageUrl ?? '',
+                      name: name,
+                      radius: 32,
                     ),
                     const SizedBox(width: 14),
                     Expanded(

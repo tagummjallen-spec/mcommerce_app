@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/widgets/brand_app_bar.dart';
 import '../../../providers/notification_provider.dart';
 import '../../../models/notification_model.dart';
 
@@ -35,8 +36,10 @@ class NotificationsScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.primaryBackground,
-      appBar: AppBar(
-        title: const Text('NOTIFICATIONS'),
+      appBar: BrandAppBar(
+        showBack: true,
+        showBag: false,
+        title: 'NOTIFICATIONS',
         actions: [
           TextButton(
             onPressed: () async {

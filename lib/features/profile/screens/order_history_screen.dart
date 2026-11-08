@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/constants/app_colors.dart';
+import '../../../core/widgets/brand_app_bar.dart';
 import '../../../providers/auth_provider.dart';
 import '../../../providers/order_provider.dart';
 
@@ -35,7 +36,11 @@ class OrderHistoryScreen extends ConsumerWidget {
     if (user == null) {
       return Scaffold(
         backgroundColor: AppColors.primaryBackground,
-        appBar: AppBar(title: const Text('ORDER HISTORY')),
+        appBar: const BrandAppBar(
+          showBack: true,
+          showBag: false,
+          title: 'ORDER HISTORY',
+        ),
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(32),
@@ -75,7 +80,11 @@ class OrderHistoryScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.primaryBackground,
-      appBar: AppBar(title: const Text('ORDER HISTORY')),
+      appBar: const BrandAppBar(
+        showBack: true,
+        showBag: false,
+        title: 'ORDER HISTORY',
+      ),
       body: ordersAsync.when(
         loading: () => const Center(
           child: CircularProgressIndicator(color: AppColors.primaryAccent),

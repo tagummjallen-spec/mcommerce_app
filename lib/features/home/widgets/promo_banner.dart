@@ -13,14 +13,14 @@ class PromoBanner extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(20),
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Color(0xFF2B1A54),
+            AppColors.primaryAccent,
             AppColors.deepAccent,
-            Color(0xFF1B1035),
+            Color(0xFF0F2B20),
           ],
         ),
         border: Border.all(color: AppColors.primaryAccent.withValues(alpha: 0.4)),
@@ -31,14 +31,16 @@ class PromoBanner extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.35),
+              color: Colors.white.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppColors.lightAccent.withValues(alpha: 0.5)),
+              border: Border.all(
+                color: Colors.white.withValues(alpha: 0.3),
+              ),
             ),
             child: const Text(
               'NEW SEASON DROP',
               style: TextStyle(
-                color: AppColors.lightAccent,
+                color: Color(0xFFD8EAD9),
                 fontSize: 10.5,
                 fontWeight: FontWeight.bold,
                 letterSpacing: 1.2,
@@ -49,6 +51,7 @@ class PromoBanner extends StatelessWidget {
           Text(
             'ASCEND YOUR\nLIMITS',
             style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                  color: Colors.white,
                   fontSize: 26,
                   height: 1.1,
                   letterSpacing: 1,
@@ -59,7 +62,7 @@ class PromoBanner extends StatelessWidget {
           Text(
             'Engineered for combat & martial supremacy.',
             style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.75),
+              color: Colors.white.withValues(alpha: 0.78),
               fontSize: 13,
             ),
           ),
@@ -69,8 +72,8 @@ class PromoBanner extends StatelessWidget {
             icon: const Icon(Icons.arrow_forward, size: 18),
             label: const Text('SHOP NOW'),
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primaryText,
-              foregroundColor: Colors.black,
+              backgroundColor: AppColors.primaryBackground,
+              foregroundColor: AppColors.primaryAccent,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             ),
           ),
@@ -110,7 +113,7 @@ class DisciplineChip extends StatelessWidget {
         child: Text(
           label,
           style: TextStyle(
-            color: isSelected ? AppColors.primaryText : AppColors.secondaryText,
+            color: isSelected ? AppColors.onAccent : AppColors.secondaryText,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
             fontSize: 13,
           ),

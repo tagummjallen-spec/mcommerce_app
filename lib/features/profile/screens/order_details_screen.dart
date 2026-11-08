@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/constants/app_colors.dart';
+import '../../../core/widgets/brand_app_bar.dart';
 import '../../../models/order_model.dart';
 import '../../../providers/order_provider.dart';
 import '../../../providers/review_provider.dart';
@@ -103,7 +104,11 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.primaryBackground,
-      appBar: AppBar(title: const Text('ORDER DETAILS')),
+      appBar: const BrandAppBar(
+        showBack: true,
+        showBag: false,
+        title: 'ORDER DETAILS',
+      ),
       body: orderAsync.when(
         loading: () => const Center(
           child: CircularProgressIndicator(color: AppColors.primaryAccent),

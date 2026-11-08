@@ -2,39 +2,76 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel {
   final String uid;
-  final String fullName;
+  final String displayName;
   final String email;
-  final String phone;
+  final String phoneNumber;
+  final String profileImageUrl;
+  final String streetAddress;
+  final String barangay;
   final String role; // 'customer' or 'admin'
   final DateTime createdAt;
 
   UserModel({
     required this.uid,
-    required this.fullName,
+    String? displayName,
+    String? fullName,
     required this.email,
-    this.phone = '',
+    String? phoneNumber,
+    String? phone,
+    this.profileImageUrl = '',
+    this.streetAddress = '',
+    this.barangay = '',
     this.role = 'customer',
     DateTime? createdAt,
-  }) : createdAt = createdAt ?? DateTime.now();
+  }) : displayName = displayName ?? fullName ?? '',
+       phoneNumber = phoneNumber ?? phone ?? '',
+       createdAt = createdAt ?? DateTime.now();
+
+  /// Backwards-compatible aliases used by older screens.
+  String get fullName => displayName;
+  String get phone => phoneNumber;
 
   factory UserModel.fromMap(Map<String, dynamic> map, String id) {
+    DateTime parsedCreatedAt = DateTime.now();
+    final rawCreatedAt = map['createdAt'];
+    if (rawCreatedAt is Timestamp) {
+      parsedCreatedAt = rawCreatedAt.toDate();
+    } else if (rawCreatedAt is DateTime) {
+      parsedCreatedAt = rawCreatedAt;
+    } else if (rawCreatedAt != null) {
+      parsedCreatedAt =
+          DateTime.tryParse(rawCreatedAt.toString()) ?? DateTime.now();
+    }
+
     return UserModel(
       uid: id,
-      fullName: map['fullName'] ?? map['name'] ?? '',
-      email: map['email'] ?? '',
-      phone: map['phone'] ?? '',
-      role: map['role'] ?? 'customer',
-      createdAt: map['createdAt'] != null
-          ? (map['createdAt'] as Timestamp).toDate()
-          : DateTime.now(),
+      displayName:
+          map['displayName']?.toString() ??
+          map['fullName']?.toString() ??
+          map['name']?.toString() ??
+          '',
+      email: map['email']?.toString() ?? '',
+      phoneNumber:
+          map['phoneNumber']?.toString() ?? map['phone']?.toString() ?? '',
+      profileImageUrl: map['profileImageUrl']?.toString() ?? '',
+      streetAddress:
+          map['streetAddress']?.toString() ?? map['street']?.toString() ?? '',
+      barangay: map['barangay']?.toString() ?? map['city']?.toString() ?? '',
+      role: map['role']?.toString() ?? 'customer',
+      createdAt: parsedCreatedAt,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'fullName': fullName,
+      'displayName': displayName,
+      'fullName': displayName, // legacy key
       'email': email,
-      'phone': phone,
+      'phoneNumber': phoneNumber,
+      'phone': phoneNumber, // legacy key
+      'profileImageUrl': profileImageUrl,
+      'streetAddress': streetAddress,
+      'barangay': barangay,
       'role': role,
       'createdAt': Timestamp.fromDate(createdAt),
     };
@@ -42,17 +79,25 @@ class UserModel {
 
   UserModel copyWith({
     String? uid,
+    String? displayName,
     String? fullName,
     String? email,
+    String? phoneNumber,
     String? phone,
+    String? profileImageUrl,
+    String? streetAddress,
+    String? barangay,
     String? role,
     DateTime? createdAt,
   }) {
     return UserModel(
       uid: uid ?? this.uid,
-      fullName: fullName ?? this.fullName,
+      displayName: displayName ?? fullName ?? this.displayName,
       email: email ?? this.email,
-      phone: phone ?? this.phone,
+      phoneNumber: phoneNumber ?? phone ?? this.phoneNumber,
+      profileImageUrl: profileImageUrl ?? this.profileImageUrl,
+      streetAddress: streetAddress ?? this.streetAddress,
+      barangay: barangay ?? this.barangay,
       role: role ?? this.role,
       createdAt: createdAt ?? this.createdAt,
     );
