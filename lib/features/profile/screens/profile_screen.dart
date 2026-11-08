@@ -182,6 +182,19 @@ class ProfileScreen extends ConsumerWidget {
             },
           ),
 
+          const SizedBox(height: 18),
+
+          // ===== Saved delivery address =====
+          profileAsync.maybeWhen(
+            data: (profile) => (profile != null && profile.hasSavedAddress)
+                ? _AddressCard(
+                    address: profile.formattedAddress,
+                    onEdit: () => context.push('/profile/edit'),
+                  )
+                : const SizedBox.shrink(),
+            orElse: () => const SizedBox.shrink(),
+          ),
+
           const SizedBox(height: 24),
 
           // ===== Account section =====
@@ -406,6 +419,86 @@ class ProfileScreen extends ConsumerWidget {
               }
             },
             child: const Text('Update'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AddressCard extends StatelessWidget {
+  final String address;
+  final VoidCallback onEdit;
+
+  const _AddressCard({required this.address, required this.onEdit});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(16, 14, 10, 14),
+      decoration: BoxDecoration(
+        color: AppColors.secondarySurface,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: AppColors.primaryAccent.withValues(alpha: 0.14),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(
+              Icons.location_on_outlined,
+              color: AppColors.primaryAccent,
+              size: 20,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'DELIVERY ADDRESS',
+                  style: TextStyle(
+                    color: AppColors.tertiaryText,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 10.5,
+                    letterSpacing: 1.1,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  address,
+                  style: TextStyle(
+                    color: AppColors.primaryText,
+                    fontSize: 13,
+                    height: 1.4,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          TextButton(
+            onPressed: onEdit,
+            style: TextButton.styleFrom(
+              minimumSize: const Size(0, 34),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+            child: Text(
+              'EDIT',
+              style: TextStyle(
+                color: AppColors.lightAccent,
+                fontSize: 11.5,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 0.4,
+              ),
+            ),
           ),
         ],
       ),

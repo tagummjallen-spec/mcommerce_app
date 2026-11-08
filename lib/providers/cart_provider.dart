@@ -11,7 +11,26 @@ class CartState {
   final List<CartItemModel> items;
   const CartState({this.items = const []});
 
-  double get subtotal => items.fold(0.0, (acc, item) => acc + item.totalPrice);
+  /// Items the customer has checked for checkout.
+  List<CartItemModel> get selectedItems =>
+      items.where((item) => item.selected).toList(growable: false);
+
+  /// True when at least one item is checked.
+  bool get hasSelection => items.any((item) => item.selected);
+
+  /// True when every cart item is checked.
+  bool get allSelected =>
+      items.isNotEmpty && items.every((item) => item.selected);
+
+  int get selectedCount => items.where((item) => item.selected).length;
+
+  /// Subtotal of checked items only, so unchecked items never affect totals.
+  double get subtotal =>
+      selectedItems.fold(0.0, (acc, item) => acc + item.totalPrice);
+
+  /// Subtotal of every item in the bag (used for context only).
+  double get fullSubtotal => items.fold(0.0, (acc, item) => acc + item.totalPrice);
+
   int get totalQuantity => items.fold(0, (acc, item) => acc + item.quantity);
 }
 
@@ -125,6 +144,25 @@ class CartNotifier extends StateNotifier<CartState> {
 
   void removeItem(String itemId) {
     state = CartState(items: [...state.items.where((i) => i.id != itemId)]);
+    _persist();
+  }
+
+  /// Check or uncheck a single cart item.
+  void toggleSelected(String itemId) {
+    final items = [...state.items];
+    final index = items.indexWhere((i) => i.id == itemId);
+    if (index < 0) return;
+    items[index] = items[index].copyWith(selected: !items[index].selected);
+    state = CartState(items: items);
+    _persist();
+  }
+
+  /// Check or uncheck every item at once (the "Select All" control).
+  void setAllSelected(bool selected) {
+    if (state.items.isEmpty) return;
+    state = CartState(
+      items: [for (final item in state.items) item.copyWith(selected: selected)],
+    );
     _persist();
   }
 

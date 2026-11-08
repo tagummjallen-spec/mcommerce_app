@@ -90,6 +90,48 @@ class CartScreen extends ConsumerWidget {
             )
           : Column(
               children: [
+                // ===== Select all bar =====
+                Container(
+                  padding: const EdgeInsets.fromLTRB(12, 2, 20, 2),
+                  child: Row(
+                    children: [
+                      Checkbox(
+                        value: cart.allSelected,
+                        onChanged: (value) =>
+                            cartNotifier.setAllSelected(value ?? false),
+                        activeColor: AppColors.primaryAccent,
+                        checkColor: AppColors.onAccent,
+                        visualDensity: VisualDensity.compact,
+                        materialTapTargetSize:
+                            MaterialTapTargetSize.shrinkWrap,
+                        side: BorderSide(
+                          color: AppColors.secondaryText,
+                          width: 1.4,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () =>
+                            cartNotifier.setAllSelected(!cart.allSelected),
+                        child: Text(
+                          'Select all',
+                          style: TextStyle(
+                            color: AppColors.primaryText,
+                            fontSize: 13.5,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        '${cart.selectedCount} of ${cart.items.length} selected',
+                        style: TextStyle(
+                          color: AppColors.tertiaryText,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 // ===== Items list =====
                 Expanded(
                   child: ListView.separated(
@@ -99,15 +141,39 @@ class CartScreen extends ConsumerWidget {
                     itemBuilder: (context, index) {
                       final item = cart.items[index];
                       return Container(
-                        padding: const EdgeInsets.all(12),
+                        padding: const EdgeInsets.fromLTRB(4, 12, 12, 12),
                         decoration: BoxDecoration(
                           color: AppColors.secondarySurface,
                           borderRadius: BorderRadius.circular(14),
-                          border: Border.all(color: AppColors.border),
+                          border: Border.all(
+                            color: item.selected
+                                ? AppColors.primaryAccent.withValues(
+                                    alpha: 0.45,
+                                  )
+                                : AppColors.border,
+                          ),
                         ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            // Selection checkbox
+                            Padding(
+                              padding: const EdgeInsets.only(top: 24),
+                              child: Checkbox(
+                                value: item.selected,
+                                onChanged: (_) =>
+                                    cartNotifier.toggleSelected(item.id),
+                                activeColor: AppColors.primaryAccent,
+                                checkColor: AppColors.onAccent,
+                                visualDensity: VisualDensity.compact,
+                                materialTapTargetSize:
+                                    MaterialTapTargetSize.shrinkWrap,
+                                side: BorderSide(
+                                  color: AppColors.secondaryText,
+                                  width: 1.4,
+                                ),
+                              ),
+                            ),
                             // Thumbnail
                             Container(
                               width: 76,
@@ -323,7 +389,11 @@ class CartScreen extends ConsumerWidget {
                     top: false,
                     child: Column(
                       children: [
-                        _SummaryRow(label: 'Subtotal', value: subtotal),
+                        _SummaryRow(
+                          label:
+                              'Subtotal (${cart.selectedCount} selected)',
+                          value: subtotal,
+                        ),
                         _SummaryRow(
                           label: 'Shipping (simulated)',
                           value: shipping,
@@ -358,7 +428,7 @@ class CartScreen extends ConsumerWidget {
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton.icon(
-                            onPressed: () => context.push('/checkout'),
+                            onPressed: () => _goToCheckout(context, cart),
                             icon: const Icon(Icons.lock_outline, size: 18),
                             label: const Text('PROCEED TO CHECKOUT'),
                           ),
@@ -380,6 +450,19 @@ class CartScreen extends ConsumerWidget {
               ],
             ),
     );
+  }
+
+  void _goToCheckout(BuildContext context, CartState cart) {
+    if (!cart.hasSelection) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Select at least one item to checkout.'),
+          backgroundColor: AppColors.warning,
+        ),
+      );
+      return;
+    }
+    context.push('/checkout');
   }
 
   void _confirmClearAll(BuildContext context, CartNotifier notifier) {

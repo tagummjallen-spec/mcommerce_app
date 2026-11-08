@@ -121,6 +121,9 @@ class AuthService {
     required String phoneNumber,
     required String streetAddress,
     required String barangay,
+    required String cityMunicipality,
+    required String province,
+    required String postalCode,
     String? profileImageUrl,
   }) async {
     final data = <String, dynamic>{
@@ -130,6 +133,9 @@ class AuthService {
       'phone': phoneNumber.trim(), // legacy key
       'streetAddress': streetAddress.trim(),
       'barangay': barangay.trim(),
+      'cityMunicipality': cityMunicipality.trim(),
+      'province': province.trim(),
+      'postalCode': postalCode.trim(),
       'updatedAt': FieldValue.serverTimestamp(),
     };
     if (profileImageUrl != null) {

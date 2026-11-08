@@ -25,12 +25,19 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
   final _streetController = TextEditingController();
+  final _barangayController = TextEditingController();
   final _cityController = TextEditingController();
   final _provinceController = TextEditingController();
   final _postalController = TextEditingController();
 
   String _paymentMethod = 'COD'; // COD | GCash (simulated)
   bool _isPlacingOrder = false;
+
+  /// Whether the shipping form mirrors the saved profile address. The customer
+  /// can switch to a one-off address for this order at any time.
+  bool _useSavedAddress = false;
+  bool _addressModeInitialized = false;
+  bool _addressClearedByUser = false;
 
   /// Tracks the values we injected so later live profile emissions never
   /// overwrite text the customer has edited manually.
@@ -56,11 +63,68 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
       return;
     }
 
+    if (!_addressModeInitialized) {
+      _addressModeInitialized = true;
+      _useSavedAddress = profile.hasCompleteAddress;
+      _addressClearedByUser = false;
+      if (mounted) setState(() {});
+    }
+
     _fillIfUntouched(_nameController, profile.displayName);
     _fillIfUntouched(_emailController, profile.email);
     _fillIfUntouched(_phoneController, profile.phoneNumber);
-    _fillIfUntouched(_streetController, profile.streetAddress);
-    _fillIfUntouched(_cityController, profile.barangay);
+
+    // Fill the address once from the profile, or keep it in sync while the
+    // "saved address" option is active. Once the customer opts into a
+    // different address we never overwrite what they type.
+    if (_useSavedAddress || !_addressClearedByUser) {
+      _fillIfUntouched(_streetController, profile.streetAddress);
+      _fillIfUntouched(_barangayController, profile.barangay);
+      _fillIfUntouched(_cityController, profile.cityMunicipality);
+      _fillIfUntouched(_provinceController, profile.province);
+      _fillIfUntouched(_postalController, profile.postalCode);
+    }
+  }
+
+  void _setAddressFromProfile(UserModel profile) {
+    _streetController.text = profile.streetAddress;
+    _barangayController.text = profile.barangay;
+    _cityController.text = profile.cityMunicipality;
+    _provinceController.text = profile.province;
+    _postalController.text = profile.postalCode;
+
+    _appliedProfileValues[_streetController] = profile.streetAddress;
+    _appliedProfileValues[_barangayController] = profile.barangay;
+    _appliedProfileValues[_cityController] = profile.cityMunicipality;
+    _appliedProfileValues[_provinceController] = profile.province;
+    _appliedProfileValues[_postalController] = profile.postalCode;
+  }
+
+  void _clearAddressFields() {
+    for (final controller in [
+      _streetController,
+      _barangayController,
+      _cityController,
+      _provinceController,
+      _postalController,
+    ]) {
+      controller.clear();
+      _appliedProfileValues.remove(controller);
+    }
+  }
+
+  void _toggleAddressMode() {
+    final profile = ref.read(currentUserProfileProvider).valueOrNull;
+    if (profile == null || !profile.hasCompleteAddress) return;
+    setState(() {
+      _useSavedAddress = !_useSavedAddress;
+      _addressClearedByUser = !_useSavedAddress;
+      if (_useSavedAddress) {
+        _setAddressFromProfile(profile);
+      } else {
+        _clearAddressFields();
+      }
+    });
   }
 
   void _fillIfUntouched(TextEditingController controller, String value) {
@@ -80,6 +144,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     _emailController.dispose();
     _phoneController.dispose();
     _streetController.dispose();
+    _barangayController.dispose();
     _cityController.dispose();
     _provinceController.dispose();
     _postalController.dispose();
@@ -124,8 +189,14 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     }
 
     final cart = ref.read(cartProvider);
-    if (cart.items.isEmpty) {
-      _showSnack('Your cart is empty.', AppColors.error);
+    final selectedItems = cart.selectedItems;
+    if (selectedItems.isEmpty) {
+      _showSnack(
+        cart.items.isEmpty
+            ? 'Your cart is empty.'
+            : 'Select at least one item to checkout.',
+        AppColors.error,
+      );
       return;
     }
 
@@ -134,7 +205,8 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     try {
       debugPrint(
         'Checkout: placing order uid=${user.uid} method=$_paymentMethod '
-        'items=${cart.items.length} subtotal=$_subtotal shipping=$_shippingFee',
+        'items=${selectedItems.length} subtotal=$_subtotal '
+        'shipping=$_shippingFee',
       );
 
       final shipping = ShippingAddressSnapshot(
@@ -142,6 +214,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         email: _emailController.text.trim(),
         phone: _phoneController.text.trim(),
         street: _streetController.text.trim(),
+        barangay: _barangayController.text.trim(),
         city: _cityController.text.trim(),
         province: _provinceController.text.trim(),
         postalCode: _postalController.text.trim(),
@@ -151,7 +224,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           .read(orderServiceProvider)
           .placeOrder(
             customerId: user.uid,
-            items: List.unmodifiable(cart.items),
+            items: List.unmodifiable(selectedItems),
             shipping: shipping,
             paymentMethod: _paymentMethod,
             shippingFee: _shippingFee,
@@ -161,9 +234,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         'Checkout: order created id=$orderId, clearing purchased items',
       );
 
-      // Clear purchased items from the cart after successful creation.
+      // Clear only the checked-out items; unchecked items stay in the cart.
       try {
-        final purchasedIds = cart.items.map((e) => e.id).toList();
+        final purchasedIds = selectedItems.map((e) => e.id).toList();
         ref.read(cartProvider.notifier).clearPurchasedItems(purchasedIds);
       } catch (e, st) {
         debugPrint('Checkout: failed to clear purchased items: $e\n$st');
@@ -225,6 +298,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   Widget build(BuildContext context) {
     final cart = ref.watch(cartProvider);
     final user = ref.watch(authStateProvider).valueOrNull;
+    final savedProfile = ref.watch(currentUserProfileProvider).valueOrNull;
+    final canUseSavedAddress = savedProfile?.hasCompleteAddress ?? false;
+    final useSavedAddress = _useSavedAddress && canUseSavedAddress;
 
     // Live profile updates (e.g. address saved from Edit profile) populate the
     // shipping form immediately without requiring a screen rebuild from scratch.
@@ -242,7 +318,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     return Scaffold(
       backgroundColor: AppColors.primaryBackground,
       appBar: const BrandAppBar(showBack: true),
-      body: cart.items.isEmpty && !_isPlacingOrder
+      body: cart.selectedItems.isEmpty && !_isPlacingOrder
           ? Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -254,7 +330,10 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                   ),
                   const SizedBox(height: 14),
                   Text(
-                    'Nothing to checkout.',
+                    cart.items.isEmpty
+                        ? 'Nothing to checkout.'
+                        : 'No items selected. Check items in your cart first.',
+                    textAlign: TextAlign.center,
                     style: TextStyle(color: AppColors.secondaryText),
                   ),
                   const SizedBox(height: 16),
@@ -305,9 +384,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                         ),
                       ),
 
-                    // ===== Contact / Shipping form =====
+                    // ===== Contact details =====
                     Text(
-                      'CONTACT & SHIPPING',
+                      'CONTACT DETAILS',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         letterSpacing: 1.2,
                         color: AppColors.secondaryText,
@@ -349,12 +428,105 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                       keyboardType: TextInputType.phone,
                       validator: (v) => _validateField(v, 'Phone number'),
                     ),
+
+                    const SizedBox(height: 26),
+
+                    // ===== Delivery address =====
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'DELIVERY ADDRESS',
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(
+                                  letterSpacing: 1.2,
+                                  color: AppColors.secondaryText,
+                                  fontSize: 13,
+                                ),
+                          ),
+                        ),
+                        if (canUseSavedAddress)
+                          TextButton(
+                            onPressed: _toggleAddressMode,
+                            style: TextButton.styleFrom(
+                              minimumSize: const Size(0, 32),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                              ),
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
+                            child: Text(
+                              useSavedAddress
+                                  ? 'USE A DIFFERENT ADDRESS'
+                                  : 'USE SAVED ADDRESS',
+                              style: TextStyle(
+                                color: AppColors.lightAccent,
+                                fontSize: 10.5,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 0.3,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                    if (useSavedAddress && savedProfile != null) ...[
+                      const SizedBox(height: 10),
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryAccent.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: AppColors.primaryAccent.withValues(
+                              alpha: 0.45,
+                            ),
+                          ),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Icon(
+                              Icons.check_circle,
+                              color: AppColors.primaryAccent,
+                              size: 19,
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Saved address',
+                                    style: TextStyle(
+                                      color: AppColors.primaryText,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 12.5,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 3),
+                                  Text(
+                                    savedProfile.formattedAddress,
+                                    style: TextStyle(
+                                      color: AppColors.secondaryText,
+                                      fontSize: 12.5,
+                                      height: 1.4,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                     const SizedBox(height: 14),
                     _buildField(
                       controller: _streetController,
-                      label: 'Street Address',
+                      label: 'Street Address / House no.',
                       hint: 'Blk 12 Lot 3, Sampaguita St.',
                       icon: Icons.home_outlined,
+                      readOnly: useSavedAddress,
                       validator: (v) => _validateField(v, 'Street address'),
                     ),
                     const SizedBox(height: 14),
@@ -362,35 +534,82 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                       children: [
                         Expanded(
                           child: _buildField(
-                            controller: _cityController,
-                            label: 'Barangay / City',
-                            hint: 'Brgy. San Isidro, Binangonan',
-                            icon: Icons.location_city_outlined,
-                            validator: (v) =>
-                                _validateField(v, 'Barangay / City'),
+                            controller: _barangayController,
+                            label: 'Barangay',
+                            hint: 'Brgy. San Isidro',
+                            icon: Icons.location_on_outlined,
+                            readOnly: useSavedAddress,
+                            validator: (v) => _validateField(v, 'Barangay'),
                           ),
                         ),
                         const SizedBox(width: 12),
+                        Expanded(
+                          child: _buildField(
+                            controller: _cityController,
+                            label: 'City / Municipality',
+                            hint: 'Binangonan',
+                            icon: Icons.location_city_outlined,
+                            readOnly: useSavedAddress,
+                            validator: (v) =>
+                                _validateField(v, 'City / Municipality'),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 14),
+                    Row(
+                      children: [
                         Expanded(
                           child: _buildField(
                             controller: _provinceController,
                             label: 'Province',
                             hint: 'Rizal',
                             icon: Icons.map_outlined,
+                            readOnly: useSavedAddress,
                             validator: (v) => _validateField(v, 'Province'),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: _buildField(
+                            controller: _postalController,
+                            label: 'Postal Code',
+                            hint: '1940',
+                            icon: Icons.pin_drop_outlined,
+                            keyboardType: TextInputType.number,
+                            readOnly: useSavedAddress,
+                            validator: (v) => _validateField(v, 'Postal code'),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 14),
-                    _buildField(
-                      controller: _postalController,
-                      label: 'Postal Code',
-                      hint: '1940',
-                      icon: Icons.pin_drop_outlined,
-                      keyboardType: TextInputType.number,
-                      validator: (v) => _validateField(v, 'Postal code'),
-                    ),
+                    if (canUseSavedAddress &&
+                        !useSavedAddress &&
+                        savedProfile != null) ...[
+                      const SizedBox(height: 10),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(
+                            Icons.info_outline_rounded,
+                            size: 15,
+                            color: AppColors.tertiaryText,
+                          ),
+                          const SizedBox(width: 7),
+                          Expanded(
+                            child: Text(
+                              'This one-off address is only for this order '
+                              'and will not replace your saved address.',
+                              style: TextStyle(
+                                color: AppColors.tertiaryText,
+                                fontSize: 11.5,
+                                height: 1.4,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
 
                     const SizedBox(height: 26),
 
@@ -461,7 +680,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                             ),
                           ),
                           const SizedBox(height: 12),
-                          ...cart.items.map(
+                          ...cart.selectedItems.map(
                             (item) => Padding(
                               padding: const EdgeInsets.symmetric(vertical: 4),
                               child: Row(
@@ -578,6 +797,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     required IconData icon,
     String? Function(String?)? validator,
     TextInputType keyboardType = TextInputType.text,
+    bool readOnly = false,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -595,10 +815,21 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           controller: controller,
           keyboardType: keyboardType,
           validator: validator,
-          style: TextStyle(color: AppColors.primaryText, fontSize: 14.5),
+          readOnly: readOnly,
+          style: TextStyle(
+            color: readOnly ? AppColors.secondaryText : AppColors.primaryText,
+            fontSize: 14.5,
+          ),
           decoration: InputDecoration(
             hintText: hint,
             prefixIcon: Icon(icon, size: 19, color: AppColors.secondaryText),
+            suffixIcon: readOnly
+                ? Icon(
+                    Icons.lock_outline,
+                    size: 16,
+                    color: AppColors.tertiaryText,
+                  )
+                : null,
           ),
         ),
       ],

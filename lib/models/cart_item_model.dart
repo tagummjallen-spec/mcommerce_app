@@ -9,6 +9,7 @@ class CartItemModel {
   final String variantId;
   final int quantity;
   final int availableStock;
+  final bool selected;
 
   CartItemModel({
     required this.id,
@@ -21,6 +22,7 @@ class CartItemModel {
     required this.variantId,
     required this.quantity,
     required this.availableStock,
+    this.selected = true,
   });
 
   double get totalPrice => unitPrice * quantity;
@@ -28,6 +30,7 @@ class CartItemModel {
   CartItemModel copyWith({
     int? quantity,
     int? availableStock,
+    bool? selected,
   }) {
     return CartItemModel(
       id: id,
@@ -40,6 +43,7 @@ class CartItemModel {
       variantId: variantId,
       quantity: quantity ?? this.quantity,
       availableStock: availableStock ?? this.availableStock,
+      selected: selected ?? this.selected,
     );
   }
 
@@ -54,6 +58,7 @@ class CartItemModel {
       'variantId': variantId,
       'quantity': quantity,
       'totalPrice': totalPrice,
+      'selected': selected,
     };
   }
 
@@ -75,6 +80,7 @@ class CartItemModel {
       variantId: map['variantId']?.toString() ?? '',
       quantity: qty < 1 ? 1 : qty,
       availableStock: (map['availableStock'] as num?)?.toInt() ?? 99,
+      selected: map['selected'] is bool ? map['selected'] as bool : true,
     );
   }
 }

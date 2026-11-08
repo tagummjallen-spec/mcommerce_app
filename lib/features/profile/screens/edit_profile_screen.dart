@@ -28,6 +28,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   final _emailController = TextEditingController();
   final _streetController = TextEditingController();
   final _barangayController = TextEditingController();
+  final _cityController = TextEditingController();
+  final _provinceController = TextEditingController();
+  final _postalController = TextEditingController();
 
   bool _isLoading = false;
   bool _isPickingImage = false;
@@ -42,6 +45,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     _emailController.dispose();
     _streetController.dispose();
     _barangayController.dispose();
+    _cityController.dispose();
+    _provinceController.dispose();
+    _postalController.dispose();
     super.dispose();
   }
 
@@ -59,6 +65,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           _emailController.text = profile.email;
           _streetController.text = profile.streetAddress;
           _barangayController.text = profile.barangay;
+          _cityController.text = profile.cityMunicipality;
+          _provinceController.text = profile.province;
+          _postalController.text = profile.postalCode;
           _profileImageUrl = profile.profileImageUrl;
         });
       });
@@ -178,6 +187,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         phoneNumber: _phoneController.text.trim(),
         streetAddress: _streetController.text.trim(),
         barangay: _barangayController.text.trim(),
+        cityMunicipality: _cityController.text.trim(),
+        province: _provinceController.text.trim(),
+        postalCode: _postalController.text.trim(),
         profileImageUrl: _profileImageUrl,
       );
       // The profile provider is a Firestore stream, but invalidating guarantees
@@ -402,17 +414,59 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                     ),
                     const SizedBox(height: 16),
                     _UnderlinedField(
-                      label: 'Barangay / City',
+                      label: 'Barangay',
                       child: TextFormField(
                         controller: _barangayController,
-                        textInputAction: TextInputAction.done,
+                        textInputAction: TextInputAction.next,
                         style: TextStyle(
                           color: AppColors.primaryText,
                           fontSize: 15,
                         ),
                         decoration: _underlineDecoration(
-                          hint: 'Barangay San Isidro, Binangonan',
+                          hint: 'Barangay San Isidro',
                         ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    _UnderlinedField(
+                      label: 'City / Municipality',
+                      child: TextFormField(
+                        controller: _cityController,
+                        textInputAction: TextInputAction.next,
+                        style: TextStyle(
+                          color: AppColors.primaryText,
+                          fontSize: 15,
+                        ),
+                        decoration: _underlineDecoration(
+                          hint: 'Binangonan',
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    _UnderlinedField(
+                      label: 'Province',
+                      child: TextFormField(
+                        controller: _provinceController,
+                        textInputAction: TextInputAction.next,
+                        style: TextStyle(
+                          color: AppColors.primaryText,
+                          fontSize: 15,
+                        ),
+                        decoration: _underlineDecoration(hint: 'Rizal'),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    _UnderlinedField(
+                      label: 'Postal code',
+                      child: TextFormField(
+                        controller: _postalController,
+                        keyboardType: TextInputType.number,
+                        textInputAction: TextInputAction.done,
+                        style: TextStyle(
+                          color: AppColors.primaryText,
+                          fontSize: 15,
+                        ),
+                        decoration: _underlineDecoration(hint: '1940'),
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -427,8 +481,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                         SizedBox(width: 7),
                         Expanded(
                           child: Text(
-                            'Clearing both fields removes your saved delivery '
-                            'address. Checkout will then ask for it again.',
+                            'These details are saved to your account and '
+                            'pre-filled at checkout. You can still use a '
+                            'different address for a specific order.',
                             style: TextStyle(
                               color: AppColors.tertiaryText,
                               fontSize: 11.5,

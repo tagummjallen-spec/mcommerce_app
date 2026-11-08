@@ -7,6 +7,7 @@ class ShippingAddressSnapshot {
   final String email;
   final String phone;
   final String street;
+  final String barangay;
   final String city;
   final String province;
   final String postalCode;
@@ -16,6 +17,7 @@ class ShippingAddressSnapshot {
     required this.email,
     required this.phone,
     required this.street,
+    this.barangay = '',
     required this.city,
     required this.province,
     required this.postalCode,
@@ -27,6 +29,7 @@ class ShippingAddressSnapshot {
       'email': email,
       'phone': phone,
       'street': street,
+      'barangay': barangay,
       'city': city,
       'province': province,
       'postalCode': postalCode,
@@ -39,13 +42,24 @@ class ShippingAddressSnapshot {
       email: map['email'] ?? '',
       phone: map['phone'] ?? '',
       street: map['street'] ?? '',
+      barangay: map['barangay'] ?? '',
       city: map['city'] ?? '',
       province: map['province'] ?? '',
       postalCode: map['postalCode'] ?? '',
     );
   }
 
-  String get fullAddress => '$street, $city, $province $postalCode';
+  String get fullAddress {
+    final parts = <String>[];
+    if (street.trim().isNotEmpty) parts.add(street.trim());
+    if (barangay.trim().isNotEmpty) parts.add(barangay.trim());
+    final cityProvince = [city.trim(), province.trim()]
+        .where((part) => part.isNotEmpty)
+        .join(', ');
+    if (cityProvince.isNotEmpty) parts.add(cityProvince);
+    if (postalCode.trim().isNotEmpty) parts.add(postalCode.trim());
+    return parts.join(', ');
+  }
 }
 
 class OrderModel {
